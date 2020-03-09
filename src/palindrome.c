@@ -5,7 +5,7 @@ int isPalindrome(int num) {
 	int i;
 	sprintf(s, "%d", num);
 	for (i = 0; i < strlen(s) / 2; i++) {
-		if (s[i] != s[strlen(s)-i-1]) return 0;
+		if (s[i] != s[strlen(s) - i - 1]) return 0;
 	}
 	return 1;
 }
