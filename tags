@@ -1,0 +1,17 @@
+$(modules	Makefile	/^$(modules): $/
+.PHONY	Makefile	/^.PHONY: all $(modules) clean$/
+CROSS_COMPILE	include.mk	10
+all	Makefile	/^all: $(modules) vmlinux$/
+boot_dir	Makefile	/^boot_dir	  := boot$/
+clean	Makefile	/^clean: $/
+drivers_dir	Makefile	/^drivers_dir	  := drivers$/
+init_dir	Makefile	/^init_dir	  := init$/
+lib_dir	Makefile	/^lib_dir		  := lib$/
+link_script	Makefile	/^link_script   := $(tools_dir)\/scse0_3.lds$/
+modules	Makefile	/^modules		  := boot drivers init lib $(test_dir)$/
+objects	Makefile	/^objects		  := $(boot_dir)\/start.o			  \\$/
+objects	Makefile	/^objects :=$(objects) $(test_dir)\/*.o$/
+test_dir	Makefile	/^test_dir          :=$/
+tools_dir	Makefile	/^tools_dir	  := tools$/
+vmlinux	Makefile	/^vmlinux: $(modules)$/
+vmlinux_elf	Makefile	/^vmlinux_elf	  := gxemul\/vmlinux$/
