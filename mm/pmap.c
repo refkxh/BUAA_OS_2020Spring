@@ -32,6 +32,7 @@ void mips_detect_memory()
     // Step 2: Calculate corresponding npage value.
 	npage = basemem >> PGSHIFT;
 
+
     printf("Physical memory: %dK available, ", (int)(maxpa / 1024));
     printf("base = %dK, extended = %dK\n", (int)(basemem / 1024),
            (int)(extmem / 1024));
@@ -226,7 +227,6 @@ page_alloc(struct Page **pp)
 	bzero(page2kva(ppage_temp), BY2PG);
 	*pp = ppage_temp;
 	return 0;
-
 
 }
 

@@ -16,6 +16,7 @@ void mips_init()
 	physical_memory_manage_check();
        // page_check();
 
+
 	panic("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
 	while (1);
