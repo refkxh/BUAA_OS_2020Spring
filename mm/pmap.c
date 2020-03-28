@@ -135,6 +135,7 @@ void boot_map_segment(Pde *pgdir, u_long va, u_long size, u_long pa, int perm)
 		pgtable_entry = boot_pgdir_walk(pgdir, va_temp, 1);
 		*pgtable_entry = (pa + i) | perm | PTE_V;
 	}
+	*(pgdir + PDX(va)) |= perm;
 
 }
 
