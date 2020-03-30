@@ -1,0 +1,62 @@
+Autotest: Begin at Mon Mar 30 12:17:49 CST 2020
+Begin build at Mon Mar 30 12:17:50 CST 2020
+Cleanning the project.................
+
+for d in boot drivers init lib mm;	\
+		do					\
+			make --directory=$d clean; \
+		done; \
+	rm -rf *.o *~ gxemul/vmlinux
+make[1]: Entering directory `/usr/src/workdir/boot'
+rm -rf *~ *.o
+make[1]: Leaving directory `/usr/src/workdir/boot'
+make[1]: Entering directory `/usr/src/workdir/drivers'
+for d in gxconsole; \
+		do				\
+			make --directory=$d clean; \
+		done
+make[2]: Entering directory `/usr/src/workdir/drivers/gxconsole'
+rm -rf *.o *~
+make[2]: Leaving directory `/usr/src/workdir/drivers/gxconsole'
+make[1]: Leaving directory `/usr/src/workdir/drivers'
+make[1]: Entering directory `/usr/src/workdir/init'
+rm -rf *~ *.o
+make[1]: Leaving directory `/usr/src/workdir/init'
+make[1]: Entering directory `/usr/src/workdir/lib'
+rm -rf *~ *.o
+make[1]: Leaving directory `/usr/src/workdir/lib'
+make[1]: Entering directory `/usr/src/workdir/mm'
+rm -rf *~ *.o
+make[1]: Leaving directory `/usr/src/workdir/mm'
+
+Building the project..................
+
+make --directory=boot
+make[1]: Entering directory `/usr/src/workdir/boot'
+/OSLAB/compiler/usr/bin/mips_4KC-gcc -O -G 0 -mno-abicalls -fno-builtin -Wa,-xgot -Wall -fPIC -march=r3000 -I../include/ -c start.S 
+make[1]: Leaving directory `/usr/src/workdir/boot'
+make --directory=drivers
+make[1]: Entering directory `/usr/src/workdir/drivers'
+make --directory=gxconsole
+make[2]: Entering directory `/usr/src/workdir/drivers/gxconsole'
+/OSLAB/compiler/usr/bin/mips_4KC-gcc -O -G 0 -mno-abicalls -fno-builtin -Wa,-xgot -Wall -fPIC -march=r3000   -c -o console.o console.c
+make[2]: Leaving directory `/usr/src/workdir/drivers/gxconsole'
+make[1]: Leaving directory `/usr/src/workdir/drivers'
+make --directory=init
+make[1]: Entering directory `/usr/src/workdir/init'
+/OSLAB/compiler/usr/bin/mips_4KC-gcc -O -G 0 -mno-abicalls -fno-builtin -Wa,-xgot -Wall -fPIC -march=r3000 -I../include -c init.c
+init.c: In function 'mips_init':
+init.c:17: error: too many arguments to function 'page_init'
+init.c:19: warning: implicit declaration of function 'get_page_status'
+init.c:9: warning: unused variable 'pp2'
+init.c:9: warning: unused variable 'pp1'
+init.c:9: warning: unused variable 'pp0'
+make[1]: *** [init.o] Error 1
+make[1]: Leaving directory `/usr/src/workdir/init'
+make: *** [init] Error 2
+Compile Error!
+
+End build at Mon Mar 30 12:17:52 CST 2020
+[32m[ Test low addr to high addr list with get status ][0m
+[31m[01m[ There is something wrong with your vmlinx. ][0m
+[33m[01m[ You got 0 (of 100) this time. Mon Mar 30 12:17:52 CST 2020 ][0m
