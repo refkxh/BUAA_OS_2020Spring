@@ -48,7 +48,7 @@ void mips_detect_memory()
 	If we're out of memory, should panic, else return this address of memory we have allocated.*/
 static void *alloc(u_int n, u_int align, int clear)
 {
-    // extern char end[];
+    extern char end[];
     u_long alloced_mem;
 
     /* Initialize `freemem` if this is the first time. The first virtual address that the
@@ -72,7 +72,7 @@ static void *alloc(u_int n, u_int align, int clear)
     }
 
     // We're out of memory, PANIC !!
-    if (PADDR(freemem) >= maxpa) {
+    if (PADDR(freemem) < end) {
         panic("out of memorty\n");
         return (void *)-E_NO_MEM;
     }
