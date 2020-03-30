@@ -54,7 +54,7 @@ static void *alloc(u_int n, u_int align, int clear)
     /* Initialize `freemem` if this is the first time. The first virtual address that the
      * linker did *not* assign to any kernel code or global variables. */
     if (freemem == 0) {
-        freemem = KADDR(maxpa);
+        freemem = KADDR(maxpa) + 1;
     }
 
     /* Step 1: Round up `freemem` up to be aligned properly */
