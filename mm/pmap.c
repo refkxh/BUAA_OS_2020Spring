@@ -450,7 +450,7 @@ tlb_invalidate(Pde *pgdir, u_long va)
 void get_page_status(int pa) {
 	struct Page *pp = pa2page(pa), *i;
 	get_page_status_count++;
-	LIST_FOREACH(i, page_free_list, pp_link) {
+	LIST_FOREACH(i, &page_free_list, pp_link) {
 		if (i == pp) {
 			printf("times:%d,page status:1\n", get_page_status_count);
 			return;
