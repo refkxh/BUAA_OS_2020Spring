@@ -18,6 +18,7 @@ static u_long freemem;
 
 static struct Page_list page_free_list;	/* Free list of physical pages */
 
+int get_page_status_count;
 
 /* Overview:
  	Initialize basemem and npage.
@@ -185,7 +186,7 @@ void mips_vm_init()
   Hint:
 	Use `LIST_INSERT_HEAD` to insert something to list.*/
 void
-page_init(void)
+page_init(int mode)
 {
     int i;
 	/* Step 1: Initialize page_free_list. */
@@ -205,7 +206,12 @@ page_init(void)
     /* Step 4: Mark the other memory as free. */
 	for (; i < npage; i++) {
 		(pages + i)->pp_ref = 0;
-		LIST_INSERT_HEAD(&page_free_list, pages + i, pp_link);
+		if (mode) {
+			LIST_INSERT_TAIL(&page_free_list, pages + i, pp_link);
+		}
+		else {
+			LIST_INSERT_HEAD(&page_free_list, pages + i, pp_link);
+		}	
 	}
 }
 
@@ -439,6 +445,23 @@ tlb_invalidate(Pde *pgdir, u_long va)
     } else {
         tlb_out(PTE_ADDR(va));
     }
+}
+
+void get_page_status(int pa) {
+	struct Page *pp = pa2page(pa), *i;
+	get_page_status_count++;
+	LIST_FOREACH(i, page_free_list, pp_link) {
+		if (i == pp) {
+			printf("times:%d,page status:1\n", get_page_status_count);
+			return;
+		}
+	}
+	if (pp->pp_ref) {
+		printf("times:%d,page status:3\n", get_page_status_count);
+	}
+	else {
+		printf("times:%d,page status:2\n", get_page_status_count);
+	}
 }
 
 void
