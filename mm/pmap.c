@@ -72,7 +72,7 @@ static void *alloc(u_int n, u_int align, int clear)
     }
 
     // We're out of memory, PANIC !!
-    if (PADDR(freemem) < end) {
+    if (freemem < end) {
         panic("out of memorty\n");
         return (void *)-E_NO_MEM;
     }
