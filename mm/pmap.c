@@ -249,7 +249,7 @@ void
 page_free(struct Page *pp)
 {
     /* Step 1: If there's still virtual address refers to this page, do nothing. */
-	if (pp->pp_ref > 0) return; 
+	if (pp->pp_ref > 0) return;
 
     /* Step 2: If the `pp_ref` reaches to 0, mark this page as free and return. */
 	if (pp->pp_ref == 0) {
