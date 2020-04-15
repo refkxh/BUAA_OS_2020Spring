@@ -473,7 +473,7 @@ u_int newmkenvid(struct Env *e, int pri) {
 
 void output_env_info(int envid) {
 	static u_int call_counter = 0;
-	printf("no=%d,env_index=%d,env_pri=%d\n", ++call_counter, ENVX(envid), envid >> 28);
+	printf("no=%d,env_index=%d,env_pri=%d\n", ++call_counter, ENVX(envid), ((u_int) envid) >> 28);
 }
 
 void init_envid() {
