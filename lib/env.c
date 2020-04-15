@@ -501,30 +501,21 @@ int check_same_root(u_int envid1, u_int envid2) {
 }
 
 void kill_all(u_int envid) {
-	struct Env *root, *e;
+	struct Env *root;
 	struct Env *nodes[NENV];
 	int cnt = 0;
 	int i;
 	envid2env(envid, &root, 0);
 	while (root->env_parent_id != 0) envid2env(root->env_parent_id, &root, 0);
-	LIST_FOREACH(e, &env_sched_list[0], env_sched_link) {
-		int tmp = check_same_root(root->env_id, e->env_id);
+	for (int i = 0; i < NENV; i++) {
+		if (envs[i].env_status == ENV_FREE) continue;
+		int tmp = check_same_root(root->env_id, envs[i].env_id);
 		if (tmp < 0) {
 			printf("something is wrong!\n");
 			return;
 		}
 		else if (tmp > 0) {
-			nodes[cnt++] = e;
-		}
-	}
-	LIST_FOREACH(e, &env_sched_list[1], env_sched_link) {
-		int tmp = check_same_root(root->env_id, e->env_id);
-		if (tmp < 0) {
-			printf("something is wrong!\n");
-			return;
-		}
-		else if (tmp > 0) {
-			nodes[cnt++] = e;
+			nodes[cnt++] = envs + i;
 		}
 	}
 	for (i = 0; i < cnt; i++) {
