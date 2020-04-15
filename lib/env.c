@@ -18,6 +18,7 @@ struct Env_list env_sched_list[2];      // Runnable list
 extern Pde *boot_pgdir;
 extern char *KERNEL_SP;
 
+struct Env *roots[NENV];
 
 /* Overview:
  *  This function is for making an unique ID for every env.
@@ -500,24 +501,34 @@ int check_same_root(u_int envid1, u_int envid2) {
 	return 0;
 }
 
+struct Env* get_root(u_int envid) {
+	struct Env *e;
+	if (roots[ENVX(envid)] != NULL) return roots[ENVX(envid)];
+	envid2env(envid, &e, 0);
+	if (e->env_parent_id == 0) return roots[ENVX(envid)] = e;
+	return roots[ENVX(envid)] = get_root(e->env_parent_id);
+}
+
 void kill_all(u_int envid) {
 	struct Env *root;
 	struct Env *nodes[NENV];
 	int cnt = 0;
 	int i;
-	envid2env(envid, &root, 0);
-	if (root->env_status == ENV_FREE) return;
-	while (root->env_parent_id != 0) envid2env(root->env_parent_id, &root, 0);
 	for (i = 0; i < NENV; i++) {
+		roots[i] = NULL;
+	}
+	root = get_root(envid);
+	for (i = 0; i < NENV; i++) {
+		struct Env *cur_root, *cur;
 		if (envs[i].env_status == ENV_FREE) continue;
-		int tmp = check_same_root(root->env_id, envs[i].env_id);
-		if (tmp < 0) {
+		cur_root = get_root(envs[i].env_id);
+		if (root != cur_root) continue;
+		envid2env(envid, &cur, 0);
+		if (cur->env_status == ENV_NOT_RUNNABLE) {
 			printf("something is wrong!\n");
 			return;
 		}
-		else if (tmp > 0) {
-			nodes[cnt++] = envs + i;
-		}
+		nodes[cnt++] = envs + i;
 	}
 	for (i = 0; i < cnt; i++) {
 		nodes[i]->env_status = ENV_NOT_RUNNABLE;
