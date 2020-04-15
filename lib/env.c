@@ -464,6 +464,31 @@ env_run(struct Env *e)
      */
 	env_pop_tf(&curenv->env_tf, GET_ENV_ASID(curenv->env_id));
 }
+
+u_int newmkenvid(struct Env *e, int pri) {
+	static u_long new_next_env_id = 0;
+    u_int idx = e - envs;
+    return (pri << 28) | (++new_next_env_id << (1 + LOG2NENV)) | idx;
+}
+
+void output_env_info(int envid) {
+	static u_int call_counter = 0;
+	printf("no=%d,env_index=%d,env_pri=%d\n", ++call_counter, ENVX(envid), envid >> 28);
+}
+
+void init_envid() {
+	int i;
+	for (i = 0; i < NENV; i++) {
+		if (envs[i].env_status == ENV_RUNNABLE) {
+			envs[i].env_id = newmkenvid(envs + i, envs[i].env_pri);
+		}
+	}
+}
+
+int newenvid2env(u_int envid, struct Env **penv, int checkperm) {
+	return envid2env(envid, penv, checkperm);
+}
+
 void env_check()
 {
         struct Env *temp, *pe, *pe0, *pe1, *pe2;
