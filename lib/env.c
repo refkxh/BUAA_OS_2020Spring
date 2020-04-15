@@ -504,10 +504,11 @@ void kill_all(u_int envid) {
 	struct Env *root, *e;
 	struct Env *nodes[NENV];
 	int cnt = 0;
+	int i;
 	envid2env(envid, &root, 0);
 	while (root->env_parent_id != 0) envid2env(root->env_parent_id, &root, 0);
-	LIST_FOREACH(e, env_sched_list[0], env_sched_link) {
-		int tmp = check_same_root(root->env_id, e.env_id);
+	LIST_FOREACH(e, &env_sched_list[0], env_sched_link) {
+		int tmp = check_same_root(root->env_id, e->env_id);
 		if (tmp < 0) {
 			printf("something is wrong!\n");
 			return;
@@ -516,8 +517,8 @@ void kill_all(u_int envid) {
 			nodes[cnt++] = e;
 		}
 	}
-	LIST_FOREACH(e, env_sched_list[1], env_sched_link) {
-		int tmp = check_same_root(root->env_id, e.env_id);
+	LIST_FOREACH(e, &env_sched_list[1], env_sched_link) {
+		int tmp = check_same_root(root->env_id, e->env_id);
 		if (tmp < 0) {
 			printf("something is wrong!\n");
 			return;
