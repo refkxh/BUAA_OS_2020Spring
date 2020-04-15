@@ -507,7 +507,7 @@ void kill_all(u_int envid) {
 	int i;
 	envid2env(envid, &root, 0);
 	while (root->env_parent_id != 0) envid2env(root->env_parent_id, &root, 0);
-	for (int i = 0; i < NENV; i++) {
+	for (i = 0; i < NENV; i++) {
 		if (envs[i].env_status == ENV_FREE) continue;
 		int tmp = check_same_root(root->env_id, envs[i].env_id);
 		if (tmp < 0) {
