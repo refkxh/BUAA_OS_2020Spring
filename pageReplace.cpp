@@ -1,4 +1,4 @@
-#pragma GCC optimize(2)
+#pragma G++ optimize(3)
 
 #include "pageReplace.h"
 
