@@ -3,43 +3,48 @@
 #include "pageReplace.h"
 
 #include <map>
-#include <set>
-#include <stack>
 
 const unsigned int PAGE_SHIFT = 12;
 const unsigned int N_PHY_PAGE = 64;
+const int INF = 1e9 + 7;
 
 #define GET_PAGE(addr) (((unsigned long) (addr)) >> PAGE_SHIFT)
 
-std::stack<int> freeStack;  // physical index
-std::map<long, std::pair<long, int>> frames;  // <page number, <last referenced time, physical index>>
-std::set<std::pair<long, long>> lastUsed;  // <last referenced time, page number>
+int top = 0;
+int freeStack[N_PHY_PAGE];  // physical index
+
+long lastUsed[N_PHY_PAGE]; // <physical index, last referenced time>
+
+std::map<long, int> frames;  // <page number, physical index>
 
 void pageReplace(long *physic_memory, long nwAdd) {
     static long clock = 0;
     if (clock == 0) {
         for (int i = 0; i < N_PHY_PAGE; i++) {
-            freeStack.push(i);
+            freeStack[top++] = i;
         }
     }
     long pageNum = GET_PAGE(nwAdd);
     if (frames.count(pageNum)) {
-        lastUsed.erase(std::pair<long, long>(frames[pageNum].first, pageNum));
-        frames[pageNum].first = clock;
-        lastUsed.insert(std::pair<long, long>(clock++, pageNum));
+        lastUsed[frames[pageNum]] = clock++;
         return;
     }
-    if (freeStack.empty()) {
-        auto victim = lastUsed.begin();
-        physic_memory[frames[victim->second].second] = 0;
-        freeStack.push(frames[victim->second].second);
-        frames.erase(victim->second);
-        lastUsed.erase(victim);
+    if (top == 0) {
+        int victim;
+        int earliest = INF;
+        for (int i = 0; i < N_PHY_PAGE; i++) {
+            if (lastUsed[i] < earliest) {
+                earliest = lastUsed[i];
+                victim = i;
+            }
+        }
+        frames.erase(physic_memory[victim]);
+        physic_memory[victim] = 0;
+        freeStack[top++] = victim;
     }
-    long index = freeStack.top();
-    freeStack.pop();
-    frames[pageNum] = std::pair<long, int>(clock, index);
-    lastUsed.insert(std::pair<long, long>(clock++, pageNum));
+    long index = freeStack[--top];
+    frames[pageNum] = index;
+    lastUsed[index] = clock++;
     physic_memory[index] = pageNum;
 }
 
