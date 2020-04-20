@@ -22,6 +22,7 @@ void pageReplace(long *physic_memory, long nwAdd) {
         for (int i = 0; i < N_PHY_PAGE; i++) {
             freeStack[top++] = i;
         }
+        clock++;
     }
     long pageNum = GET_PAGE(nwAdd);
     if (frames[pageNum] > 0) {
@@ -43,7 +44,7 @@ void pageReplace(long *physic_memory, long nwAdd) {
     }
     long index = freeStack[--top];
     frames[pageNum] = index;
-    lastUsed[index] = clock++;
+    lastUsed[index] = (clock++) - INF;
     physic_memory[index] = pageNum;
 }
 
