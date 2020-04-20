@@ -1,4 +1,7 @@
+#pragma GCC optimize(2)
+
 #include "pageReplace.h"
+
 #include <list>
 #include <map>
 #include <set>
@@ -14,6 +17,7 @@ std::set<std::pair<long, long>> lastUsed;  // <last referenced time, page number
 
 void pageReplace(long *physic_memory, long nwAdd) {
     static long clock = 0;
+    static bool isFirst = true;
     if (clock == 0) {
         for (int i = 0; i < N_PHY_PAGE; i++) {
             freeList.push_back(i);
@@ -25,7 +29,7 @@ void pageReplace(long *physic_memory, long nwAdd) {
         lastUsed.insert(std::pair<long, long>(clock++, pageNum));
         return;
     }
-    else if (freeList.empty()) {
+    if (freeList.empty()) {
         while (true) {
             auto victim = lastUsed.begin();
             if (frames.count(victim->second) && victim->first == frames[victim->second].first) {
@@ -43,5 +47,10 @@ void pageReplace(long *physic_memory, long nwAdd) {
     frames[pageNum] = std::pair<long, int>(clock, index);
     lastUsed.insert(std::pair<long, long>(clock++, pageNum));
     physic_memory[index] = pageNum;
+    if (isFirst) {
+        isFirst = false;
+        pageReplace(physic_memory, nwAdd + (1 << PAGE_SHIFT));
+    }
+    else isFirst = true;
 }
 
