@@ -1,9 +1,12 @@
+#pragma GCC optimize (2)
+
+#include <climits>
+
 #include "pageReplace.h"
 
 #define PAGE_SHIFT 12
 #define N_PHY_PAGE 64
 #define N_PAGE 32768
-#define INF 2147483647
 #define GET_PAGE(addr) (((unsigned long) (addr)) >> PAGE_SHIFT)
 
 long lastUsed[N_PHY_PAGE];  // <physical index, last referenced time>
@@ -20,7 +23,7 @@ void pageReplace(long *physic_memory, long nwAdd) {
     }
     int victim;
     if (top >= N_PHY_PAGE) {
-        int earliest = INF;
+        int earliest = INT_MAX;
         for (int i = 0; i < N_PHY_PAGE; i++) {
             if (lastUsed[i] < earliest) {
                 earliest = lastUsed[i];
