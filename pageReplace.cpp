@@ -1,40 +1,37 @@
 #pragma GCC optimize (2)
 
-#include <climits>
-
 #include "pageReplace.h"
 
 #define PAGE_SHIFT 12
 #define N_PHY_PAGE 64
 #define N_PAGE 32768
-#define GET_PAGE(addr) (((unsigned long) (addr)) >> PAGE_SHIFT)
+#define GET_PAGE(addr)  ((addr) >> PAGE_SHIFT)
 
-long lastUsed[N_PHY_PAGE];  // <physical index, last referenced time>
+bool lastUsed[N_PHY_PAGE];
 
 int frames[N_PAGE];  // <page number, physical index>
 
 void pageReplace(long *physic_memory, long nwAdd) {
-    static long clock = 0;
     static int top = 0;
+    static int ptr = 0;
     long pageNum = GET_PAGE(nwAdd);
     if (frames[pageNum] > 0) {
-        lastUsed[frames[pageNum]] = clock++;
+        lastUsed[frames[pageNum]] = true;
         return;
     }
-    int victim;
     if (top >= N_PHY_PAGE) {
-        int earliest = INT_MAX;
-        for (int i = 0; i < N_PHY_PAGE; i++) {
-            if (lastUsed[i] < earliest) {
-                earliest = lastUsed[i];
-                victim = i;
-            }
+        while (lastUsed[ptr]) {
+            lastUsed[ptr] = false;
+            ptr = (ptr + 1) & (N_PHY_PAGE - 1);
         }
-        frames[physic_memory[victim]] = 0;
+        frames[physic_memory[ptr]] = 0;
+        lastUsed[ptr] = true;
+        frames[pageNum] = ptr;
+        physic_memory[ptr] = pageNum;
     }
-    else victim = top++;
-    frames[pageNum] = victim;
-    lastUsed[victim] = clock++;
-    physic_memory[victim] = pageNum;
+    else {
+        frames[pageNum] = top;
+        physic_memory[top++] = pageNum;
+    }
 }
 
