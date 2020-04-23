@@ -17,6 +17,15 @@ void pageReplace(long *physic_memory, long nwAdd) {
     long pageNum = GET_PAGE(nwAdd);
     if (frames[pageNum] > 0) {
         lastUsed[frames[pageNum]] = true;
+        if (pageNum + 1 < N_PAGE) {
+            while (lastUsed[ptr]) {
+                lastUsed[ptr] = false;
+                ptr = (ptr + 1) & (N_PHY_PAGE - 1);
+            }
+            frames[physic_memory[ptr]] = 0;
+            frames[pageNum + 1] = ptr;
+            physic_memory[ptr] = pageNum + 1;
+        }
         return;
     }
     if (top >= N_PHY_PAGE) {
