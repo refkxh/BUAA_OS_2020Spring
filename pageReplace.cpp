@@ -25,9 +25,9 @@ void pageReplace(long *physic_memory, long nwAdd) {
             ptr = (ptr + 1) & (N_PHY_PAGE - 1);
         }
         frames[physic_memory[ptr]] = 0;
-        lastUsed[ptr] = true;
         frames[pageNum] = ptr;
         physic_memory[ptr] = pageNum;
+		ptr = (ptr + 1) & (N_PHY_PAGE - 1);
     }
     else {
         frames[pageNum] = top;
