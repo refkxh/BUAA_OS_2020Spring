@@ -4,7 +4,7 @@
 
 #define PAGE_SHIFT 12
 #define N_PHY_PAGE 64
-#define N_PAGE 32768
+#define N_PAGE 524288
 #define GET_PAGE(addr)  ((addr) >> PAGE_SHIFT)
 
 bool lastUsed[N_PHY_PAGE];
