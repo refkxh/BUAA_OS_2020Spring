@@ -142,8 +142,11 @@ int sys_mem_alloc(int sysno, u_int envid, u_int va, u_int perm)
 	struct Env *env;
 	struct Page *ppage;
 	int ret;
+	if ((perm & PTE_V) == 0 || (perm & PTE_COW)) return -E_INVAL;
+	if (va >= UTOP || page_alloc(&ppage) || envid2env(envid, &env, 1)) return -1;
+	page_insert(env->env_pgdir, ppage, va, perm);
 	ret = 0;
-
+	return ret;
 }
 
 /* Overview:
@@ -176,6 +179,10 @@ int sys_mem_map(int sysno, u_int srcid, u_int srcva, u_int dstid, u_int dstva,
 	round_dstva = ROUNDDOWN(dstva, BY2PG);
 
     //your code here
+	if ((perm & PTE_V) == 0 || (perm & PTE_COW)) return -1;
+	if (round_srcva >= UTOP || round_dstva >= UTOP) return -1;
+	if (envid2env(srcid, &srcenv, 0) || envid2env(dstid, &dstenv, 0)) return -1;
+	ppage = page_lookup(srcenv->env_pgdir, round_srcva, &ppte);
 
 	return ret;
 }
