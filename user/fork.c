@@ -83,16 +83,30 @@ static void
 pgfault(u_int va)
 {
 	u_int *tmp;
+	u_long perm;
+	Pte pte;
 	//	writef("fork.c:pgfault():\t va:%x\n",va);
-    
+   
+	pte = (*vpt)[VPN(va)];
+	perm = pte & (BY2PG - 1);
+	if ((perm & PTE_COW) == 0) user_panic("`va` is not a copy-on-write page.");
+	perm -= PTE_COW;
+
     //map the new page at a temporary place
+	
+	syscall_mem_alloc(0, USTACKTOP, perm);
 
 	//copy the content
 	
+	user_bcopy(pte, USTACKTOP, BY2PG);
+
     //map the page on the appropriate place
-	
+
+	syscall_mem_map(0, USTACKTOP, 0, pte, perm);
+
     //unmap the temporary place
-	
+	syscall_mem_unmap(0, USTACKTOP);
+
 }
 
 /* Overview:
@@ -118,6 +132,18 @@ duppage(u_int envid, u_int pn)
 	u_int addr;
 	u_int perm;
 
+	addr = pn << PGSHIFT;
+	perm = (*vpt)[pn] & (BY2PG - 1);
+	if (perm & PTE_R) {
+		if (!(perm & PTE_LIBRARY)) {
+			if (!(perm & PTE_COW)) {
+				(*vpt)[pn] |= PTE_COW;
+				perm |= PTE_COW;
+			}	
+		}	
+	}
+	syscall_mem_map(0, addr, envid, addr, perm);
+
 	//	user_panic("duppage not implemented");
 }
 
@@ -141,6 +167,11 @@ fork(void)
 	extern struct Env *env;
 	u_int i;
 
+	newenvid = syscall_env_alloc();
+	if (newenvid) {
+		;
+	}
+	else env = envs + ENVX(syscall_getenvid());
 
 	//The parent installs pgfault using set_pgfault_handler
 
