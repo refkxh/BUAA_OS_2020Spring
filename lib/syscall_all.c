@@ -371,13 +371,19 @@ int sys_ipc_can_send(int sysno, u_int envid, u_int value, u_int srcva,
 	struct Env *e;
 	struct Page *p;
 
+	if (srcva >= UTOP) return -E_INVAL;
 	r = envid2env(envid, &e, 0);
 	if (r) return r;
 	if (e->env_ipc_recving == 0) return -E_IPC_NOT_RECV;
 	e->env_ipc_recving = 0;
 	e->env_ipc_from = curenv->env_id;
 	e->env_ipc_value = value;
-	if (srcva != 0) sys_mem_map(9533, curenv->env_id, srcva, envid, e->env_ipc_dstva, perm);
+	if (srcva != 0) {
+		p = page_lookup(curenv->env_pgdir, srcva, NULL);
+		if (p == NULL || e->env_ipc_dstva >= UTOP) return -1;
+		r = page_insert(e->env_pgdir, p, e->env_ipc_dstva, perm);
+		if (r) return r;
+	}
 	e->env_ipc_perm = perm;
 	e->env_status = ENV_RUNNABLE;
 
