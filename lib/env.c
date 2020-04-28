@@ -165,7 +165,7 @@ env_setup_vm(struct Env *e)
      *  See ./include/mmu.h for layout.
      *  Can you use boot_pgdir as a template?
      */
-	for (; i < PDX(UVPT); i++) {
+	for (; i <= PDX(~0); i++) {
 		pgdir[i] = boot_pgdir[i];
 	}
 

@@ -117,7 +117,7 @@ int sys_set_pgfault_handler(int sysno, u_int envid, u_int func, u_int xstacktop)
 	struct Env *env;
 	int ret;
 
-	if (envid2env(envid, &env, 1)) return -1;
+	if (envid2env(envid, &env, 0)) return -1;
 	env->env_pgfault_handler = func;
 	env->env_xstacktop = xstacktop;
 
@@ -188,7 +188,7 @@ int sys_mem_map(int sysno, u_int srcid, u_int srcva, u_int dstid, u_int dstva,
     //your code here
 	if ((perm & PTE_V) == 0) return -1;
 	if (round_srcva >= UTOP || round_dstva >= UTOP) return -1;
-	if (envid2env(srcid, &srcenv, 1) || envid2env(dstid, &dstenv, 1)) return -1;
+	if (envid2env(srcid, &srcenv, 0) || envid2env(dstid, &dstenv, 0)) return -1;
 	ppage = page_lookup(srcenv->env_pgdir, round_srcva, &ppte);
 	if (ppage == NULL || page_insert(dstenv->env_pgdir, ppage, round_dstva, perm)) return -1;
 
@@ -211,7 +211,7 @@ int sys_mem_unmap(int sysno, u_int envid, u_int va)
 	int ret;
 	struct Env *env;
 
-	if (va >= UTOP || envid2env(envid, &env, 1)) return -1;
+	if (va >= UTOP || envid2env(envid, &env, 0)) return -1;
 	page_remove(env->env_pgdir, va);
 
 	return ret;
