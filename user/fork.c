@@ -131,6 +131,7 @@ duppage(u_int envid, u_int pn)
 {
 	u_int addr;
 	u_int perm;
+	int flag = 0;
 
 	addr = pn << PGSHIFT;
 	perm = (*vpt)[pn] & (BY2PG - 1);
@@ -138,11 +139,12 @@ duppage(u_int envid, u_int pn)
 		if (!(perm & PTE_LIBRARY)) {
 			if (!(perm & PTE_COW)) {
 				perm |= PTE_COW;
-				syscall_mem_map(0, addr, 0, addr, perm);
+				flag = 1;	
 			}	
 		}	
 	}	
-	syscall_mem_map(0, addr, envid, addr, perm); 
+	syscall_mem_map(0, addr, envid, addr, perm);
+	if (flag) syscall_mem_map(0, addr, 0, addr, perm);
 
 	//	user_panic("duppage not implemented");
 }
