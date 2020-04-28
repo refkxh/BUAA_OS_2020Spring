@@ -249,19 +249,22 @@ static int load_icode_mapper(u_long va, u_int32_t sgsize,
     struct Page *p = NULL;
     u_long i;
     int r;
+	int ret;
     u_long offset = va - ROUNDDOWN(va, BY2PG);
 
     /*Step 1: load all content of bin into memory. */
     r = 0;
 	if (offset) {
-		if (page_alloc(&p)) return -1;
+		ret = page_alloc(&p);
+		if (ret) return ret;
 		r = MIN(BY2PG - offset, bin_size);
 		bcopy(bin, page2kva(p) + offset, r);
 		page_insert(env->env_pgdir, p, va, PTE_R);
 	}
 	for (i = r; i < bin_size; i += BY2PG) {
         /* Hint: You should alloc a new page. */
-		if (page_alloc(&p)) return -1;
+		ret = page_alloc(&p);
+		if (ret) return ret;
 		bcopy(bin + i, page2kva(p), MIN(BY2PG, bin_size - i));
 		page_insert(env->env_pgdir, p, va + i, PTE_R);
     }
@@ -269,7 +272,8 @@ static int load_icode_mapper(u_long va, u_int32_t sgsize,
     /*Step 2: alloc pages to reach `sgsize` when `bin_size` < `sgsize`.
     * hint: variable `i` has the value of `bin_size` now! */
 	while (i < sgsize) {
-		if (page_alloc(&p)) return -1;
+		ret = page_alloc(&p);
+		if (ret) return ret;
 		page_insert(env->env_pgdir, p, va + i, PTE_R);
 		i += BY2PG;
     }
