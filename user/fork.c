@@ -84,11 +84,9 @@ pgfault(u_int va)
 {
 	u_int *tmp;
 	u_long perm;
-	Pte pte;
 	//	writef("fork.c:pgfault():\t va:%x\n",va);
    
-	pte = (*vpt)[VPN(va)];
-	perm = pte & (BY2PG - 1);
+	perm = (*vpt)[VPN(va)] & (BY2PG - 1);
 	if ((perm & PTE_COW) == 0) user_panic("`va` is not a copy-on-write page.");
 	perm -= PTE_COW;
 	tmp = USTACKTOP;
@@ -99,11 +97,11 @@ pgfault(u_int va)
 
 	//copy the content
 	
-	user_bcopy(ROUNDDOWN(pte, BY2PG), tmp, BY2PG);
+	user_bcopy(ROUNDDOWN(va, BY2PG), tmp, BY2PG);
 
     //map the page on the appropriate place
 
-	syscall_mem_map(0, tmp, 0, pte, perm);
+	syscall_mem_map(0, tmp, 0, va, perm);
 
     //unmap the temporary place
 	
@@ -143,8 +141,8 @@ duppage(u_int envid, u_int pn)
 				syscall_mem_map(0, addr, 0, addr, perm);
 			}	
 		}	
-	}
-	syscall_mem_map(0, addr, envid, addr, perm);
+	}	
+	syscall_mem_map(0, addr, envid, addr, perm); 
 
 	//	user_panic("duppage not implemented");
 }
