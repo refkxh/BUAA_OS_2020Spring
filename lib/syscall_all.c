@@ -211,7 +211,7 @@ int sys_mem_unmap(int sysno, u_int envid, u_int va)
 	int ret;
 	struct Env *env;
 
-	if (envid2env(envid, &env, 0)) return -1;
+	if (va >= UTOP || envid2env(envid, &env, 0)) return -1;
 	page_remove(env->env_pgdir, va);
 
 	return ret;
