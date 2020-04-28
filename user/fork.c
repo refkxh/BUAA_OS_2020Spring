@@ -98,13 +98,14 @@ pgfault(u_int va)
 
 	//copy the content
 	
-	user_bcopy(pte, USTACKTOP, BY2PG);
+	user_bcopy(ROUNDDOWN(pte, BY2PG), USTACKTOP, BY2PG);
 
     //map the page on the appropriate place
 
 	syscall_mem_map(0, USTACKTOP, 0, pte, perm);
 
     //unmap the temporary place
+	
 	syscall_mem_unmap(0, USTACKTOP);
 
 }
@@ -167,15 +168,20 @@ fork(void)
 	extern struct Env *env;
 	u_int i;
 
-	newenvid = syscall_env_alloc();
-	if (newenvid) {
-		;
-	}
-	else env = envs + ENVX(syscall_getenvid());
-
 	//The parent installs pgfault using set_pgfault_handler
+	set_pgfault_handler(pgfault);
 
 	//alloc a new alloc
+	newenvid = syscall_env_alloc();
+	if (newenvid) {
+		for (i = 0; i < VPN(USTACKTOP); i++) {
+			if (((*vpd)[i >> 10] & PTE_V) && ((*vpt)[i] & PTE_V)) duppage(newenvid, i);
+		}
+		syscall_mem_alloc(newenvid, UXSTACKTOP - BY2PG, PTE_V | PTE_R);
+		syscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP);
+		syscall_set_env_status(newenvid, ENV_RUNNABLE);
+	}
+	else env = envs + ENVX(syscall_getenvid());
 
 
 	return newenvid;
