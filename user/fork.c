@@ -91,22 +91,23 @@ pgfault(u_int va)
 	perm = pte & (BY2PG - 1);
 	if ((perm & PTE_COW) == 0) user_panic("`va` is not a copy-on-write page.");
 	perm -= PTE_COW;
+	tmp = USTACKTOP;
 
     //map the new page at a temporary place
 	
-	syscall_mem_alloc(0, USTACKTOP, perm);
+	syscall_mem_alloc(0, tmp, perm);
 
 	//copy the content
 	
-	user_bcopy(ROUNDDOWN(pte, BY2PG), USTACKTOP, BY2PG);
+	user_bcopy(ROUNDDOWN(pte, BY2PG), tmp, BY2PG);
 
     //map the page on the appropriate place
 
-	syscall_mem_map(0, USTACKTOP, 0, pte, perm);
+	syscall_mem_map(0, tmp, 0, pte, perm);
 
     //unmap the temporary place
 	
-	syscall_mem_unmap(0, USTACKTOP);
+	syscall_mem_unmap(0, tmp);
 
 }
 
@@ -138,8 +139,8 @@ duppage(u_int envid, u_int pn)
 	if (perm & PTE_R) {
 		if (!(perm & PTE_LIBRARY)) {
 			if (!(perm & PTE_COW)) {
-				(*vpt)[pn] |= PTE_COW;
 				perm |= PTE_COW;
+				syscall_mem_map(0, addr, 0, addr, perm);
 			}	
 		}	
 	}
