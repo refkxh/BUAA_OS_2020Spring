@@ -149,7 +149,7 @@ int sys_mem_alloc(int sysno, u_int envid, u_int va, u_int perm)
 	struct Env *env;
 	struct Page *ppage;
 	int ret;
-	if ((perm & PTE_V) == 0 || (perm & PTE_COW)) return -E_INVAL;
+	if (perm & PTE_COW) return -E_INVAL;
 	if (va >= UTOP || page_alloc(&ppage) || envid2env(envid, &env, 1)) return -1;
 	page_insert(env->env_pgdir, ppage, va, perm);
 	ret = 0;
