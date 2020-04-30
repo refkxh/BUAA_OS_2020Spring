@@ -307,14 +307,14 @@ NULL	readelf/types.h	8;"	d
 NoCOW	lib/genex.S	/^NoCOW:$/;"	l
 OUTPUT	lib/print.c	36;"	d	file:
 OUTPUT	user/print.c	36;"	d	file:
-O_ACCMODE	user/lib.h	136;"	d
-O_CREAT	user/lib.h	138;"	d
-O_EXCL	user/lib.h	140;"	d
-O_MKDIR	user/lib.h	141;"	d
-O_RDONLY	user/lib.h	133;"	d
-O_RDWR	user/lib.h	135;"	d
-O_TRUNC	user/lib.h	139;"	d
-O_WRONLY	user/lib.h	134;"	d
+O_ACCMODE	user/lib.h	137;"	d
+O_CREAT	user/lib.h	139;"	d
+O_EXCL	user/lib.h	141;"	d
+O_MKDIR	user/lib.h	142;"	d
+O_RDONLY	user/lib.h	134;"	d
+O_RDWR	user/lib.h	136;"	d
+O_TRUNC	user/lib.h	140;"	d
+O_WRONLY	user/lib.h	135;"	d
 PADDR	include/mmu.h	147;"	d
 PDMAP	include/mmu.h	17;"	d
 PDSHIFT	include/mmu.h	19;"	d
@@ -385,6 +385,7 @@ SYS_cgetc	include/unistd.h	22;"	d
 SYS_env_alloc	include/unistd.h	16;"	d
 SYS_env_destroy	include/unistd.h	11;"	d
 SYS_getenvid	include/unistd.h	9;"	d
+SYS_ipc_can_multi_send	include/unistd.h	24;"	d
 SYS_ipc_can_send	include/unistd.h	20;"	d
 SYS_ipc_recv	include/unistd.h	21;"	d
 SYS_mem_alloc	include/unistd.h	13;"	d
@@ -890,6 +891,7 @@ sys_call_table	lib/syscall.S	/^sys_call_table:                         \/\/ Sysc
 sys_env_alloc	lib/syscall_all.c	/^int sys_env_alloc(void)$/;"	f
 sys_env_destroy	lib/syscall_all.c	/^int sys_env_destroy(int sysno, u_int envid)$/;"	f
 sys_getenvid	lib/syscall_all.c	/^u_int sys_getenvid(void)$/;"	f
+sys_ipc_can_multi_send	lib/syscall_all.c	/^int sys_ipc_can_multi_send(int sysno, u_int value, u_int srcva, u_int perm, int env_count, ...) {$/;"	f
 sys_ipc_can_send	lib/syscall_all.c	/^int sys_ipc_can_send(int sysno, u_int envid, u_int value, u_int srcva,$/;"	f
 sys_ipc_recv	lib/syscall_all.c	/^void sys_ipc_recv(int sysno, u_int dstva)$/;"	f
 sys_mem_alloc	lib/syscall_all.c	/^int sys_mem_alloc(int sysno, u_int envid, u_int va, u_int perm)$/;"	f
@@ -981,7 +983,7 @@ umain	user/pingpong.c	/^umain(void)$/;"	f
 user_PrintChar	user/print.c	/^user_PrintChar(char *buf, char c, int length, int ladjust)$/;"	f
 user_PrintNum	user/print.c	/^user_PrintNum(char *buf, unsigned long u, int base, int negFlag,$/;"	f
 user_PrintString	user/print.c	/^user_PrintString(char *buf, char *s, int length, int ladjust)$/;"	f
-user_assert	user/lib.h	129;"	d
+user_assert	user/lib.h	130;"	d
 user_bcopy	user/fork.c	/^void user_bcopy(const void *src, void *dst, size_t len)$/;"	f
 user_bzero	user/fork.c	/^void user_bzero(void *v, u_int n)$/;"	f
 user_dir	Makefile	/^user_dir	  := user$/;"	m

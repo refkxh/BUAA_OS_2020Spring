@@ -40,8 +40,7 @@ NESTED(handle_sys,TF_SIZE, sp)
 Begin:
 	bge		t4, s0, Skip
 	addu	t5, t0, t4
-	addiu	t5, t5, 4
-	lw		t3, 0(t5)
+	lw		t3, 4(t5)
 	addu	t5, sp, t4
 	sw      t3, 0(t5)
 	j Begin
@@ -78,3 +77,4 @@ sys_call_table:                         // Syscall Table
     .word sys_ipc_recv
     .word sys_cgetc
 	.word sys_super_multi_parameter
+	.word sys_ipc_can_multi_send

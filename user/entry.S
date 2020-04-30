@@ -3,6 +3,7 @@
 #include <asm/asm.h>
 #include <mmu.h>
 #include <trap.h>
+#include <unistd.h>
 	.data
 
 	.p2align 12
@@ -105,4 +106,36 @@ nop
 		lw	k0,TF_EPC(sp) 	//atomic operation needed 
 		jr	k0			//
 		lw	sp,TF_REG29(sp)  /* Deallocate stack */  
+
+syscall_ipc_can_multi_send:
+	move  t0, a2
+	move  t1, a3
+	move  a3, a1
+	move  a2, a0
+	li    a0, SYS_ipc_can_multi_send
+	addiu a1, t1, 4
+	addiu t3, sp, 16
+	addiu sp, sp, -4
+	sw    s0, 0(sp)
+	addu  s0, a1, 2
+	sll   s0, s0, 2
+	subu  sp, sp, s0
+	sw    t0, 16(sp)
+	sw    t1, 20(sp)
+	li    t2, 24
+Start:
+	bge   t2, s0, Out
+	lw    t4, 0(t3)
+	addu  t5, sp, t2
+	sw    t4, 0(t5)
+	addiu t3, t3, 4
+	j     Start
+	addiu t2, t2, 4
+Out:
+	syscall
+	addu  sp, sp, s0
+	lw    s0, 0(sp)
+	addiu sp, sp, 4
+	jr ra
+	nop
 
