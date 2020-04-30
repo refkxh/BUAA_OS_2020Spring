@@ -18,6 +18,9 @@ NESTED(handle_sys,TF_SIZE, sp)
 
     // TODO: Copy the syscall number into $a0.
 	lw      a0, TF_REG4(sp)
+	lw		s0, TF_REG5(sp)
+	sll		s0, s0, 2
+	addiu	s0, s0, 4
     
     addiu   a0, a0, -__SYSCALL_BASE     // a0 <- relative syscall number
     sll     t0, a0, 2                   // t0 <- relative syscall number times 4
@@ -26,23 +29,30 @@ NESTED(handle_sys,TF_SIZE, sp)
     lw      t2, 0(t1)                   // t2 <- function entry of specific syscall
 
     lw      t0, TF_REG29(sp)            // t0 <- user's stack pointer
-    lw      t3, 16(t0)                  // t3 <- the 5th argument of msyscall
-    lw      t4, 20(t0)                  // t4 <- the 6th argument of msyscall
 
     // TODO: Allocate a space of six arguments on current kernel stack and copy the six arguments to proper location
 	lw      a0, TF_REG4(sp)
-	lw      a1, TF_REG5(sp)
-	lw      a2, TF_REG6(sp)
-	lw      a3, TF_REG7(sp)
-	addiu   sp, sp, -24
-	sw      t3, 16(sp)
-	sw      t4, 20(sp)
-    
+	lw      a1, TF_REG6(sp)
+	lw      a2, TF_REG7(sp)
+	lw      a3, 16(t0)
+	subu    sp, sp, s0
+	li		t4, 16
+Begin:
+	bge		t4, s0, Skip
+	addu	t5, t0, t4
+	addiu	t5, t5, 4
+	lw		t3, 0(t5)
+	addu	t5, sp, t4
+	sw      t3, 0(t5)
+	j Begin
+	addiu	t4, t4, 4
+Skip:
+
     jalr    t2                          // Invoke sys_* function
     nop
     
     // TODO: Resume current kernel stack
-    addiu   sp, sp, 24
+    addu    sp, sp, s0
 
     sw      v0, TF_REG2(sp)             // Store return value of function sys_* (in $v0) into trapframe
 
