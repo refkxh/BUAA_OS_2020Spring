@@ -77,6 +77,7 @@ BUILD_HANDLER	lib/genex.S	/^BUILD_HANDLER tlb	do_refill	cli$/;"	l
 BY2BLK	include/fs.h	11;"	d
 BY2PG	include/mmu.h	16;"	d
 BY2PIPE	user/pipe.c	20;"	d	file:
+Begin	lib/syscall.S	/^Begin:$/;"	l
 CC	drivers/Makefile	/^CC			  := $(CROSS_COMPILE)gcc$/;"	m
 CC	include.mk	/^CC			  := $(CROSS_COMPILE)gcc$/;"	m
 CC	readelf/Makefile	/^CC        := gcc$/;"	m
@@ -306,14 +307,14 @@ NULL	readelf/types.h	8;"	d
 NoCOW	lib/genex.S	/^NoCOW:$/;"	l
 OUTPUT	lib/print.c	36;"	d	file:
 OUTPUT	user/print.c	36;"	d	file:
-O_ACCMODE	user/lib.h	135;"	d
-O_CREAT	user/lib.h	137;"	d
-O_EXCL	user/lib.h	139;"	d
-O_MKDIR	user/lib.h	140;"	d
-O_RDONLY	user/lib.h	132;"	d
-O_RDWR	user/lib.h	134;"	d
-O_TRUNC	user/lib.h	138;"	d
-O_WRONLY	user/lib.h	133;"	d
+O_ACCMODE	user/lib.h	136;"	d
+O_CREAT	user/lib.h	138;"	d
+O_EXCL	user/lib.h	140;"	d
+O_MKDIR	user/lib.h	141;"	d
+O_RDONLY	user/lib.h	133;"	d
+O_RDWR	user/lib.h	135;"	d
+O_TRUNC	user/lib.h	139;"	d
+O_WRONLY	user/lib.h	134;"	d
 PADDR	include/mmu.h	147;"	d
 PDMAP	include/mmu.h	17;"	d
 PDSHIFT	include/mmu.h	19;"	d
@@ -394,7 +395,9 @@ SYS_putchar	include/unistd.h	8;"	d
 SYS_set_env_status	include/unistd.h	17;"	d
 SYS_set_pgfault_handler	include/unistd.h	12;"	d
 SYS_set_trapframe	include/unistd.h	18;"	d
+SYS_smp	include/unistd.h	23;"	d
 SYS_yield	include/unistd.h	10;"	d
+Skip	lib/syscall.S	/^Skip:$/;"	l
 Stat	user/fd.h	/^struct Stat {$/;"	s
 Super	include/fs.h	/^struct Super {$/;"	s
 TAILQ_ENTRY	include/queue.h	192;"	d
@@ -897,6 +900,7 @@ sys_putchar	lib/syscall_all.c	/^void sys_putchar(int sysno, int c, int a2, int a
 sys_set_env_status	lib/syscall_all.c	/^int sys_set_env_status(int sysno, u_int envid, u_int status)$/;"	f
 sys_set_pgfault_handler	lib/syscall_all.c	/^int sys_set_pgfault_handler(int sysno, u_int envid, u_int func, u_int xstacktop)$/;"	f
 sys_set_trapframe	lib/syscall_all.c	/^int sys_set_trapframe(int sysno, u_int envid, struct Trapframe *tf)$/;"	f
+sys_super_multi_parameter	init/init.c	/^int sys_super_multi_parameter(int sysno, u_int a, u_int b, u_int c, u_int d, u_int e, u_int f, u_int g, u_int h) {}$/;"	f
 sys_yield	lib/syscall_all.c	/^void sys_yield(void)$/;"	f
 syscall_cgetc	user/syscall_lib.c	/^syscall_cgetc()$/;"	f
 syscall_env_alloc	user/lib.h	/^inline static int syscall_env_alloc(void)$/;"	f
@@ -912,6 +916,7 @@ syscall_putchar	user/syscall_lib.c	/^void syscall_putchar(char ch)$/;"	f
 syscall_set_env_status	user/syscall_lib.c	/^syscall_set_env_status(u_int envid, u_int status)$/;"	f
 syscall_set_pgfault_handler	user/syscall_lib.c	/^syscall_set_pgfault_handler(u_int envid, void (*func)(void), u_int xstacktop)$/;"	f
 syscall_set_trapframe	user/syscall_lib.c	/^syscall_set_trapframe(u_int envid, struct Trapframe *tf)$/;"	f
+syscall_super_multi_parameter	user/syscall_lib.c	/^int syscall_super_multi_parameter(u_int a, u_int b, u_int c, u_int d, u_int e, u_int f, u_int g, u_int h) {$/;"	f
 syscall_yield	user/syscall_lib.c	/^syscall_yield(void)$/;"	f
 t0	include/asm-mips3k/regdef.h	23;"	d
 t0	include/asm/regdef.h	23;"	d
@@ -976,7 +981,7 @@ umain	user/pingpong.c	/^umain(void)$/;"	f
 user_PrintChar	user/print.c	/^user_PrintChar(char *buf, char c, int length, int ladjust)$/;"	f
 user_PrintNum	user/print.c	/^user_PrintNum(char *buf, unsigned long u, int base, int negFlag,$/;"	f
 user_PrintString	user/print.c	/^user_PrintString(char *buf, char *s, int length, int ladjust)$/;"	f
-user_assert	user/lib.h	128;"	d
+user_assert	user/lib.h	129;"	d
 user_bcopy	user/fork.c	/^void user_bcopy(const void *src, void *dst, size_t len)$/;"	f
 user_bzero	user/fork.c	/^void user_bzero(void *v, u_int n)$/;"	f
 user_dir	Makefile	/^user_dir	  := user$/;"	m
