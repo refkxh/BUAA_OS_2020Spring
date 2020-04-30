@@ -307,14 +307,15 @@ NULL	readelf/types.h	8;"	d
 NoCOW	lib/genex.S	/^NoCOW:$/;"	l
 OUTPUT	lib/print.c	36;"	d	file:
 OUTPUT	user/print.c	36;"	d	file:
-O_ACCMODE	user/lib.h	137;"	d
-O_CREAT	user/lib.h	139;"	d
-O_EXCL	user/lib.h	141;"	d
-O_MKDIR	user/lib.h	142;"	d
-O_RDONLY	user/lib.h	134;"	d
-O_RDWR	user/lib.h	136;"	d
-O_TRUNC	user/lib.h	140;"	d
-O_WRONLY	user/lib.h	135;"	d
+O_ACCMODE	user/lib.h	139;"	d
+O_CREAT	user/lib.h	141;"	d
+O_EXCL	user/lib.h	143;"	d
+O_MKDIR	user/lib.h	144;"	d
+O_RDONLY	user/lib.h	136;"	d
+O_RDWR	user/lib.h	138;"	d
+O_TRUNC	user/lib.h	142;"	d
+O_WRONLY	user/lib.h	137;"	d
+Out	user/entry.S	/^Out:$/;"	l
 PADDR	include/mmu.h	147;"	d
 PDMAP	include/mmu.h	17;"	d
 PDSHIFT	include/mmu.h	19;"	d
@@ -399,6 +400,7 @@ SYS_set_trapframe	include/unistd.h	18;"	d
 SYS_smp	include/unistd.h	23;"	d
 SYS_yield	include/unistd.h	10;"	d
 Skip	lib/syscall.S	/^Skip:$/;"	l
+Start	user/entry.S	/^Start:$/;"	l
 Stat	user/fd.h	/^struct Stat {$/;"	s
 Super	include/fs.h	/^struct Super {$/;"	s
 TAILQ_ENTRY	include/queue.h	192;"	d
@@ -692,6 +694,7 @@ int64_t	include/types.h	/^typedef int      __attribute__((__mode__(DI))) int64_t
 int64_t	readelf/types.h	/^typedef long long                 int64_t;$/;"	t
 ipc_recv	user/ipc.c	/^ipc_recv(u_int *whom, u_int dstva, u_int *perm)$/;"	f
 ipc_send	user/ipc.c	/^ipc_send(u_int whom, u_int val, u_int srcva, u_int perm)$/;"	f
+ipc_send_double	user/ipc.c	/^int ipc_send_double(u_int envid_1, u_int envid_2, int value, u_int srcva, u_int perm) {$/;"	f
 is_elf_format	lib/kernel_elfloader.c	/^int is_elf_format(u_char *binary)$/;"	f
 is_elf_format	readelf/readelf.c	/^int is_elf_format(u_char *binary)$/;"	f
 iscons	user/console.c	/^iscons(int fdnum)$/;"	f
@@ -980,10 +983,11 @@ uint64_t	readelf/kerelf.h	/^typedef u_int64_t               uint64_t;$/;"	t
 umain	user/fktest.c	/^void umain()$/;"	f
 umain	user/idle.c	/^void umain()$/;"	f
 umain	user/pingpong.c	/^umain(void)$/;"	f
+umain	user/pp_b.c	/^void umain() {$/;"	f
 user_PrintChar	user/print.c	/^user_PrintChar(char *buf, char c, int length, int ladjust)$/;"	f
 user_PrintNum	user/print.c	/^user_PrintNum(char *buf, unsigned long u, int base, int negFlag,$/;"	f
 user_PrintString	user/print.c	/^user_PrintString(char *buf, char *s, int length, int ladjust)$/;"	f
-user_assert	user/lib.h	130;"	d
+user_assert	user/lib.h	132;"	d
 user_bcopy	user/fork.c	/^void user_bcopy(const void *src, void *dst, size_t len)$/;"	f
 user_bzero	user/fork.c	/^void user_bzero(void *v, u_int n)$/;"	f
 user_dir	Makefile	/^user_dir	  := user$/;"	m

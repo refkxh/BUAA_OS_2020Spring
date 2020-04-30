@@ -49,3 +49,11 @@ ipc_recv(u_int *whom, u_int dstva, u_int *perm)
 	return env->env_ipc_value;
 }
 
+int ipc_send_double(u_int envid_1, u_int envid_2, int value, u_int srcva, u_int perm) {
+	int r;
+	while ((r = syscall_ipc_can_multi_send(value, srcva, perm, 2, envid_1, envid_2)) == -E_IPC_NOT_RECV) {
+		syscall_yield();
+	}
+	return r;
+}
+
