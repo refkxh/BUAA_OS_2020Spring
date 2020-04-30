@@ -399,8 +399,10 @@ int sys_ipc_can_multi_send(int sysno, u_int value, u_int srcva, u_int perm, int 
 		envid2env(va_arg(ap, u_int), &e, 0);
 		if (e->env_ipc_recving != 1) return -E_IPC_NOT_RECV;
 	}
+	va_end(ap);
 	va_start(ap, env_count);
 	for (i = 0; i < env_count; i++) {
 		sys_ipc_can_send(9539, va_arg(ap, u_int), value, srcva, perm);
 	}
+	va_end(ap);
 }
