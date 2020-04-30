@@ -107,7 +107,7 @@ nop
 		jr	k0			//
 		lw	sp,TF_REG29(sp)  /* Deallocate stack */  
 
-syscall_ipc_can_multi_send:
+LEAF(syscall_ipc_can_multi_send)
 	move  t0, a2
 	move  t1, a3
 	move  a3, a1
@@ -138,4 +138,5 @@ Out:
 	addiu sp, sp, 4
 	jr ra
 	nop
+END(syscall_ipc_can_multi_send)
 
