@@ -56,7 +56,11 @@ all: serv.x fs.img serv.b
 
 fs.img: $(FSIMGFILES)
 	dd if=/dev/zero of=../gxemul/fs.img bs=4096 count=1024 2>/dev/null
+ifeq ("/home/jovyan/lib32-sysroot/usr/bin/gcc", "$(wildcard /home/jovyan/lib32-sysroot/usr/bin/gcc)")
+	/home/jovyan/lib32-sysroot/usr/bin/gcc --sysroot /home/jovyan/lib32-sysroot/ $(INCLUDES) fsformat.c -o $(tools_dir)/fsformat -m32
+else
 	gcc $(INCLUDES) fsformat.c -o $(tools_dir)/fsformat -m32
+endif
 	chmod +x $(tools_dir)/fsformat
 	$(tools_dir)/fsformat ../gxemul/fs.img $(FSIMGFILES)
 

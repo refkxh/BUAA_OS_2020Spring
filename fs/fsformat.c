@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 #include <fcntl.h>
+#include <dirent.h>
 
 /* Prevent inc/types.h, included from inc/fs.h,
  * From attempting to redefine types defined in the host's inttypes.h. */
@@ -205,13 +206,22 @@ int make_link_block(struct File *dirf, int nblk) {
 //      use make_link_block function
 struct File *create_file(struct File *dirf) {
     struct File *dirblk;
-    int i, bno, found;
+    int i, j, bno, found;
     int nblk = dirf->f_size / BY2BLK;
     
     // Your code here
     // Step1: According to different range of nblk, make classified discussion to 
     //        calculate the correct block number.
-
+	for (i = 0; i < nblk; i++) {
+		if (i < NDIRECT) bno = dirf->f_direct[i];
+		else bno = ((int *)(disk[dirf->f_indirect].data))[i];
+		dirblk = disk[bno].data;
+		for (j = 0; j < FILE2BLK; j++) {
+			if (dirblk[j].f_name[0] == '\0') return &dirblk[j];
+		}
+	}
+	bno = make_link_block(dirf, nblk);
+	return disk[bno].data;
 
     // Step2: Find an unused pointer
 
@@ -252,7 +262,35 @@ void write_file(struct File *dirf, const char *path) {
 // Post-Condition:
 //      We ASSUM that this funcion will never fail
 void write_directory(struct File *dirf, char *name) {
-    // Your code here
+    // Your code here	
+	DIR *dir;
+	struct dirent *file_info;
+	struct File *newdir;
+	int dir_len;
+	char sub_dir[512];
+	if(strcmp(name, ".") == 0 || strcmp(name, "..")  == 0) return;
+	dir = opendir(name);
+	if (dir == NULL) return;
+	dir_len = strlen(name);
+	if (name[dir_len - 1] == '/') name[dir_len - 1] = '\0';
+	while (file_info = readdir(dir)) {
+		switch (file_info->d_type) {
+			case DT_DIR:
+				if(strcmp(file_info->d_name, ".") != 0 && strcmp(file_info->d_name, "..") != 0) {
+				    newdir = create_file(dirf);
+					strcpy(newdir->f_name, file_info->d_name);
+					newdir->f_size = 0;
+					newdir->f_type = FTYPE_DIR;
+					sprintf(sub_dir, "%s/%s", name, file_info->d_name);
+				    write_directory(newdir, sub_dir);
+				}
+				break;
+			default:
+				sprintf(sub_dir, "%s/%s", name, file_info->d_name);
+				write_file(dirf, sub_dir);
+		}
+	}
+	closedir(dir);
 }
 
 int main(int argc, char **argv) {
