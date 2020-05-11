@@ -70,7 +70,7 @@ map_block(u_int blockno)
 	if (block_is_mapped(blockno)) return 0;
 
     // Step 2: Alloc a page of memory for this block via syscall.
-	return syscall_mem_alloc(0, diskaddr(blockno), PTE_R);
+	return syscall_mem_alloc(0, diskaddr(blockno), PTE_R | PTE_V);
 }
 
 // Overview:

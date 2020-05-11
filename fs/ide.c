@@ -38,7 +38,7 @@ ide_read(u_int diskno, u_int secno, void *dst, u_int nsecs)
 		tmp = offset_begin + offset;
 		if (syscall_write_dev(&tmp, 0x13000000, 4)) user_panic("Error occurred during read the IDE disk!\n");
 		tmp = 0;
-		if (syscall_write_dev(&tmp, 0x13000020, 1)) user_panic("Error occurred during read the IDE disk!\n");
+		if (syscall_write_dev(&tmp, 0x13000020, 4)) user_panic("Error occurred during read the IDE disk!\n");
 		if (syscall_read_dev(&tmp, 0x13000030, 4)) user_panic("Error occurred during read the IDE disk!\n");
 		if (tmp == 0) user_panic("Error occurred during read the IDE disk!\n");
 		if (syscall_read_dev(dst + offset, 0x13004000, 512)) user_panic("Error occurred during read the IDE disk!\n");
@@ -80,7 +80,7 @@ ide_write(u_int diskno, u_int secno, void *src, u_int nsecs)
 		tmp = offset_begin + offset;
 		if (syscall_write_dev(&tmp, 0x13000000, 4)) user_panic("Error occurred during write the IDE disk!\n");
 		tmp = 1;
-		if (syscall_write_dev(&tmp, 0x13000020, 1)) user_panic("Error occurred during write the IDE disk!\n");
+		if (syscall_write_dev(&tmp, 0x13000020, 4)) user_panic("Error occurred during write the IDE disk!\n");
 		if (syscall_read_dev(&tmp, 0x13000030, 4)) user_panic("Error occurred during write the IDE disk!\n");
 		if (tmp == 0) user_panic("Error occurred during write the IDE disk!\n");
 		offset += 0x200;
