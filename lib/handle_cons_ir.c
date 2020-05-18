@@ -11,4 +11,5 @@ void handle_cons_ir(char c, int status) {
 	printf("length: %d\n", count);
 	printf("content: %s\n", data);
 	count = 0;
+	data[0] = '\0';
 }
