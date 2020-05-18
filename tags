@@ -83,7 +83,7 @@ BUILD_HANDLER	lib/genex.S	/^BUILD_HANDLER reserved do_reserved cli$/;"	l
 BUILD_HANDLER	lib/genex.S	/^BUILD_HANDLER tlb	do_refill	cli$/;"	l
 BY2BLK	include/fs.h	11;"	d
 BY2FILE	include/fs.h	26;"	d
-BY2PG	fs/fsformat.c	15;"	d	file:
+BY2PG	fs/fsformat.c	16;"	d	file:
 BY2PG	include/mmu.h	16;"	d
 BY2PIPE	user/pipe.c	20;"	d	file:
 BY2SECT	fs/fs.h	8;"	d
@@ -241,21 +241,21 @@ Elf32_Xword	readelf/kerelf.h	/^typedef uint64_t Elf32_Xword;$/;"	t
 Env	include/env.h	/^struct Env {$/;"	s
 FDTABLE	user/fd.h	11;"	d
 FEXPORT	include/asm/asm.h	43;"	d
-FILE2BLK	include/fs.h	39;"	d
+FILE2BLK	include/fs.h	43;"	d
 FILEBASE	user/fd.h	10;"	d
 FILEVA	fs/serv.c	20;"	d	file:
 FSIMGFILES	fs/Makefile	/^FSIMGFILES := motd newmotd$/;"	m
 FSLIB	fs/Makefile	/^FSLIB :=	fs.o \\$/;"	m
-FSREQ_CLOSE	include/fs.h	61;"	d
-FSREQ_DIRTY	include/fs.h	62;"	d
-FSREQ_MAP	include/fs.h	59;"	d
-FSREQ_OPEN	include/fs.h	58;"	d
-FSREQ_REMOVE	include/fs.h	63;"	d
-FSREQ_SET_SIZE	include/fs.h	60;"	d
-FSREQ_SYNC	include/fs.h	64;"	d
-FS_MAGIC	include/fs.h	48;"	d
-FTYPE_DIR	include/fs.h	43;"	d
-FTYPE_REG	include/fs.h	42;"	d
+FSREQ_CLOSE	include/fs.h	65;"	d
+FSREQ_DIRTY	include/fs.h	66;"	d
+FSREQ_MAP	include/fs.h	63;"	d
+FSREQ_OPEN	include/fs.h	62;"	d
+FSREQ_REMOVE	include/fs.h	67;"	d
+FSREQ_SET_SIZE	include/fs.h	64;"	d
+FSREQ_SYNC	include/fs.h	68;"	d
+FS_MAGIC	include/fs.h	52;"	d
+FTYPE_DIR	include/fs.h	47;"	d
+FTYPE_REG	include/fs.h	46;"	d
 Fd	user/fd.h	/^struct Fd {$/;"	s
 File	fs/fsformat.c	/^typedef struct File File;$/;"	t	typeref:struct:File	file:
 File	include/fs.h	/^struct File {$/;"	s
@@ -314,7 +314,7 @@ MAXOPEN	fs/serv.c	19;"	d	file:
 MAXPATHLEN	include/fs.h	18;"	d
 MIN	include/types.h	33;"	d
 MIN	readelf/types.h	33;"	d
-NBLOCK	fs/fsformat.c	22;"	d	file:
+NBLOCK	fs/fsformat.c	23;"	d	file:
 NDIRECT	include/fs.h	21;"	d
 NENV	include/env.h	12;"	d
 NESTED	include/asm-mips3k/asm.h	24;"	d
@@ -509,7 +509,7 @@ _ARGUSED	include/args.h	6;"	d
 _ENV_H_	include/env.h	4;"	d
 _ERROR_H_	include/error.h	4;"	d
 _FS_H_	include/fs.h	4;"	d
-_INC_TYPES_H_	fs/fsformat.c	14;"	d	file:
+_INC_TYPES_H_	fs/fsformat.c	15;"	d	file:
 _INC_TYPES_H_	include/types.h	5;"	d
 _INC_TYPES_H_	readelf/types.h	5;"	d
 _KCLOCK_H_	include/kclock.h	4;"	d
@@ -685,8 +685,10 @@ f_fd	user/fd.h	/^	struct Fd f_fd;$/;"	m	struct:Filefd	typeref:struct:Filefd::Fd
 f_file	user/fd.h	/^	struct File f_file;$/;"	m	struct:Filefd	typeref:struct:Filefd::File
 f_fileid	user/fd.h	/^	u_int f_fileid;$/;"	m	struct:Filefd
 f_indirect	include/fs.h	/^	u_int f_indirect;$/;"	m	struct:File
+f_modifycount	include/fs.h	/^	u_int f_modifycount;$/;"	m	struct:File
 f_name	include/fs.h	/^	u_char f_name[MAXNAMELEN];	\/\/ filename$/;"	m	struct:File
-f_pad	include/fs.h	/^	u_char f_pad[BY2FILE - MAXNAMELEN - 4 - 4 - NDIRECT * 4 - 4 - 4];$/;"	m	struct:File
+f_pad	include/fs.h	/^	u_char f_pad[BY2FILE - MAXNAMELEN - 4 - 4 - NDIRECT * 4 - 4 - 4 - 4 - 4];$/;"	m	struct:File
+f_printcount	include/fs.h	/^	u_int f_printcount;$/;"	m	struct:File
 f_size	include/fs.h	/^	u_int f_size;			\/\/ file size in bytes$/;"	m	struct:File
 f_type	include/fs.h	/^	u_int f_type;			\/\/ file type$/;"	m	struct:File
 fault_va	lib/traps.c	/^    u_int fault_va;$/;"	m	struct:pgfault_trap_frame	file:
@@ -809,7 +811,7 @@ msg	user/fstest.c	/^static char *msg = "This is the NEW message of the day!\\r\\
 myoutput	lib/printf.c	/^static void myoutput(void *arg, char *s, int l)$/;"	f	file:
 nbitblock	fs/fsformat.c	/^uint32_t nbitblock; \/\/ the number of bitmap blocks.$/;"	v
 nbitmap	fs/fs.c	/^u_int nbitmap;		\/\/ number of bitmap blocks$/;"	v
-nelem	fs/fsformat.c	18;"	d	file:
+nelem	fs/fsformat.c	19;"	d	file:
 next_block	fs/fsformat.c	/^int next_block(int type) {$/;"	f
 nextbno	fs/fsformat.c	/^uint32_t nextbno;   \/\/ next availiable block.$/;"	v
 nop	lib/genex.S	/^nop$/;"	l

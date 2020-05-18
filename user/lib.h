@@ -128,6 +128,9 @@ int	remove(const char *path);
 int	ftruncate(int fd, u_int size);
 int	sync(void);
 
+int print_file(int fd_id, int length);
+int modify_file(int fd_id, char *buf, int length);
+
 #define user_assert(x)	\
 	do {	if (!(x)) user_panic("assertion failed: %s", #x); } while (0)
 

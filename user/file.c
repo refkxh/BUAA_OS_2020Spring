@@ -277,3 +277,33 @@ sync(void)
 	return fsipc_sync();
 }
 
+int print_file(int fd_id, int length) {
+	int i;
+	int va;
+	struct Fd *fd;
+	struct Filefd *f;
+
+	fd_lookup(fd_id, &fd);
+	f = fd;
+	f->f_file.f_printcount++;
+	va = fd2data(fd);
+	for (i = 0; i < length; i++) {
+		syscall_write_dev(va + i, 0x10000000, 1);
+	}
+
+	return f->f_file.f_printcount;
+}
+
+int modify_file(int fd_id, char *buf, int length) {
+	int va;
+	struct Fd *fd;
+	struct Filefd *f;
+
+	fd_lookup(fd_id, &fd);
+	f = fd;
+	f->f_file.f_modifycount++;
+	va = fd2data(fd);
+	user_bcopy(buf, va, length);
+
+	return f->f_file.f_modifycount;
+}
