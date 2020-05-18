@@ -299,9 +299,10 @@ int modify_file(int fd_id, char *buf, int length) {
 	struct Filefd *f;
 
 	fd_lookup(fd_id, &fd);
+	fd->fd_offset = 0;
 	f = fd;
 	f->f_file.f_modifycount++;
-	file_write(fd, buf, length, 0);
+	write(fd_id, buf, length);
 
 	return f->f_file.f_modifycount;
 }
