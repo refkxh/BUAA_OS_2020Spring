@@ -3,6 +3,7 @@
 #include <env.h>
 #include <printf.h>
 #include <kclock.h>
+#include <kcons.h>
 #include <trap.h>
 
 extern char aoutcode[];
