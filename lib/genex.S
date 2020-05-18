@@ -60,6 +60,8 @@ and	t0, t2
 
 andi	t1, t0, STATUSF_IP4
 bnez	t1, timer_irq
+andi	t1, t0, STATUSF_IP2
+bnez	t1, console_irq
 nop
 END(handle_int)
 
@@ -77,6 +79,15 @@ timer_irq:
 	nop*/
 	j	ret_from_exception
 	nop
+
+console_irq:
+
+	lbu		a0, 0xb0000000(zero)
+	move	a1, t2
+	j		handle_cons_ir
+	addiu	sp, sp, -8
+	j		ret_from_exception
+	addiu	sp, sp, 8
 
 LEAF(do_reserved)
 END(do_reserved)
