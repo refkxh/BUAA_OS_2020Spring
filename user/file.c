@@ -295,15 +295,13 @@ int print_file(int fd_id, int length) {
 }
 
 int modify_file(int fd_id, char *buf, int length) {
-	int va;
 	struct Fd *fd;
 	struct Filefd *f;
 
 	fd_lookup(fd_id, &fd);
 	f = fd;
 	f->f_file.f_modifycount++;
-	va = fd2data(fd);
-	user_bcopy(buf, va, length);
+	file_write(fd, buf, length, 0);
 
 	return f->f_file.f_modifycount;
 }
