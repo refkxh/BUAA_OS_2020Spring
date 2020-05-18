@@ -84,7 +84,7 @@ console_irq:
 
 	lbu		a0, 0xb0000000(zero)
 	move	a1, t2
-	j		handle_cons_ir
+	jal		handle_cons_ir
 	addiu	sp, sp, -8
 	j		ret_from_exception
 	addiu	sp, sp, 8

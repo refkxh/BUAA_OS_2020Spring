@@ -960,7 +960,7 @@ serve_sync	fs/serv.c	/^serve_sync(u_int envid)$/;"	f
 set_except_vector	lib/traps.c	/^void *set_except_vector(int n, void *addr)$/;"	f
 set_pgfault_handler	user/pgfault.c	/^set_pgfault_handler(void (*fn)(u_int va))$/;"	f
 setup_c0_status	lib/kclock_asm.S	/^setup_c0_status STATUS_CU0|0x1001 0$/;"	l
-setup_c0_status	lib/kcons_asm.S	/^setup_c0_status STATUS_CU0|0x1001|STATUSF_IP2 0$/;"	l
+setup_c0_status	lib/kcons_asm.S	/^setup_c0_status STATUS_CU0|0x01|STATUSF_IP2 0$/;"	l
 sfork	user/fork.c	/^sfork(void)$/;"	f
 sh_addr	readelf/kerelf.h	/^        Elf32_Addr sh_addr;                 \/* Section addr *\/$/;"	m	struct:__anon5
 sh_addralign	readelf/kerelf.h	/^        Elf32_Word sh_addralign;            \/* Section alignment *\/$/;"	m	struct:__anon5
