@@ -102,12 +102,55 @@ int
 usr_load_elf(int fd , Elf32_Phdr *ph, int child_envid){
 	//Hint: maybe this function is useful 
 	//      If you want to use this func, you should fill it ,it's not hard
+	u_long va = ph->p_vaddr;
+	u_long sgsize = ph->p_memsz;
+	u_long bin_size = ph->p_filesz;
+
+	u_char *blk;
+	u_char *tmp = USTACKTOP;
+
+    u_long i;
+    int r;
+	int ret;
+    u_long offset = va - ROUNDDOWN(va, BY2PG);
+
+    r = 0;
+
+	ret = read_map(fd, ph->p_offset, &blk);
+	if (ret) return ret;
+
+	if (offset) {
+		ret = syscall_mem_alloc(child_envid, va, PTE_R | PTE_V);
+		if (ret) return ret;
+		ret = syscall_mem_map(child_envid, va, 0, tmp, PTE_R | PTE_V);
+		if (ret) return ret;
+		r = MIN(BY2PG - offset, bin_size);
+		user_bcopy(blk, tmp + offset, r);
+		ret = syscall_mem_unmap(0, tmp);
+		if (ret) return ret;
+	}
+	for (i = r; i < bin_size; i += BY2PG) {
+		ret = syscall_mem_alloc(child_envid, va + i, PTE_R | PTE_V);
+		if (ret) return ret;
+		ret = syscall_mem_map(child_envid, va + i, 0, tmp, PTE_R | PTE_V);
+		if (ret) return ret;
+		user_bcopy(blk + i, tmp, MIN(BY2PG, bin_size - i));
+		ret = syscall_mem_unmap(0, tmp);
+		if (ret) return ret;
+    }
+
+	while (i < sgsize) {
+		ret = syscall_mem_alloc(child_envid, va + i, PTE_R | PTE_V);
+		if (ret) return ret;
+		i += BY2PG;
+    }
+
 	return 0;
 }
 
 int spawn(char *prog, char **argv)
 {
-	u_char elfbuf[512];
+	//u_char elfbuf[512];
 	int r;
 	int fd;
 	u_int child_envid;
@@ -116,6 +159,9 @@ int spawn(char *prog, char **argv)
 	u_int esp;
 	Elf32_Ehdr* elf;
 	Elf32_Phdr* ph;
+
+	u_char *elfbuf;
+
 	// Note 0: some variable may be not used,you can cancel them as you like
 	// Step 1: Open the file specified by `prog` (prog is the path of the program)
 	if((r=open(prog, O_RDONLY))<0){
@@ -123,9 +169,20 @@ int spawn(char *prog, char **argv)
 		return r;
 	}
 	// Your code begins here
+	fd = r;
+	elfbuf = INDEX2DATA(fd);
+
 	// Before Step 2 , You had better check the "target" spawned is a execute bin 
+	if (usr_is_elf_format(elfbuf) == 0) return -E_INVAL;
+
 	// Step 2: Allocate an env (Hint: using syscall_env_alloc())
+	r = syscall_env_alloc();
+	if (r < 0) return r;
+	child_envid = r;
+
 	// Step 3: Using init_stack(...) to initialize the stack of the allocated env
+	init_stack(child_envid, argv, &esp);
+
 	// Step 3: Map file's content to new env's text segment
 	//        Hint 1: what is the offset of the text segment in file? try to use objdump to find out.
 	//        Hint 2: using read_map(...)
@@ -134,7 +191,19 @@ int spawn(char *prog, char **argv)
 	// Note1: Step 1 and 2 need sanity check. In other words, you should check whether
 	//       the file is opened successfully, and env is allocated successfully.
 	// Note2: You can achieve this func in any way ，remember to ensure the correctness
-	//        Maybe you can review lab3 
+	//        Maybe you can review lab3
+	size = ((struct Filefd *)num2fd(fd))->f_file.f_size;
+	if (size < 4) return -E_INVAL;
+	elf = elfbuf;
+	ph = elfbuf + elf->e_phoff;
+	for (i = 0; i < elf->e_phnum; i++) {
+		if (ph->p_type == PT_LOAD) {
+			r = usr_load_elf(fd, ph, child_envid);
+			if (r) return r;
+		}
+		ph++;
+	}
+
 	// Your code ends here
 
 	struct Trapframe *tf;
