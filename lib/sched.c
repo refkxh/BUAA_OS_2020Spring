@@ -50,5 +50,6 @@ void sched_yield(void)
 		}
 	}
 	count--;
+	e->env_runs++;
 	env_run(e);
 }
