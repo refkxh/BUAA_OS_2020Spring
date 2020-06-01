@@ -18,7 +18,7 @@ void mips_init()
 	
 	env_init();
 	
-	ENV_CREATE(user_fktest);
+	ENV_CREATE_PRIORITY(user_producer_consumer, 10);
 	//ENV_CREATE(user_pingpong);
 	
     trap_init();

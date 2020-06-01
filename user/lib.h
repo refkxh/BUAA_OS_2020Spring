@@ -66,6 +66,12 @@ int syscall_ipc_can_send(u_int envid, u_int value, u_int srcva, u_int perm);
 void syscall_ipc_recv(u_int dstva);
 int syscall_cgetc();
 
+int syscall_init_PV_var(int init_value);
+void syscall_P(int pv_id);
+void syscall_V(int pv_id);
+int syscall_check_PV_value(int pv_id);
+void syscall_release_PV_var(int pv_id);
+
 // string.c
 int strlen(const char *s);
 char *strcpy(char *dst, const char *src);

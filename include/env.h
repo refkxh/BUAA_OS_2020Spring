@@ -49,6 +49,16 @@ extern struct Env *envs;		// All environments
 extern struct Env *curenv;	        // the current env
 extern struct Env_list env_sched_list[2]; // runnable env list
 
+struct Semaphore {
+	u_int used;
+	int value;
+	u_int head;
+	u_int tail;
+	struct Env *blocked[16];
+};
+
+extern struct Semaphore semaphores[5];
+
 void env_init(void);
 int env_alloc(struct Env **e, u_int parent_id);
 void env_free(struct Env *);

@@ -170,9 +170,9 @@ ELFMAG3	readelf/kerelf.h	94;"	d
 END	include/asm-mips3k/asm.h	35;"	d
 END	include/asm/asm.h	35;"	d
 ENVX	include/env.h	13;"	d
-ENV_CREATE	include/env.h	76;"	d
-ENV_CREATE2	include/env.h	64;"	d
-ENV_CREATE_PRIORITY	include/env.h	69;"	d
+ENV_CREATE	include/env.h	86;"	d
+ENV_CREATE2	include/env.h	74;"	d
+ENV_CREATE_PRIORITY	include/env.h	79;"	d
 ENV_FREE	include/env.h	17;"	d
 ENV_NOT_RUNNABLE	include/env.h	19;"	d
 ENV_RUNNABLE	include/env.h	18;"	d
@@ -306,14 +306,14 @@ NULL	readelf/types.h	8;"	d
 NoCOW	lib/genex.S	/^NoCOW:$/;"	l
 OUTPUT	lib/print.c	36;"	d	file:
 OUTPUT	user/print.c	36;"	d	file:
-O_ACCMODE	user/lib.h	135;"	d
-O_CREAT	user/lib.h	137;"	d
-O_EXCL	user/lib.h	139;"	d
-O_MKDIR	user/lib.h	140;"	d
-O_RDONLY	user/lib.h	132;"	d
-O_RDWR	user/lib.h	134;"	d
-O_TRUNC	user/lib.h	138;"	d
-O_WRONLY	user/lib.h	133;"	d
+O_ACCMODE	user/lib.h	141;"	d
+O_CREAT	user/lib.h	143;"	d
+O_EXCL	user/lib.h	145;"	d
+O_MKDIR	user/lib.h	146;"	d
+O_RDONLY	user/lib.h	138;"	d
+O_RDWR	user/lib.h	140;"	d
+O_TRUNC	user/lib.h	144;"	d
+O_WRONLY	user/lib.h	139;"	d
 PADDR	include/mmu.h	147;"	d
 PDMAP	include/mmu.h	17;"	d
 PDSHIFT	include/mmu.h	19;"	d
@@ -380,10 +380,14 @@ SAVE_ALL	lib/genex.S	/^SAVE_ALL$/;"	l
 STATUSF_IP4	include/asm/cp0regdef.h	40;"	d
 STATUS_CU0	include/asm/cp0regdef.h	41;"	d
 STATUS_KUC	include/asm/cp0regdef.h	42;"	d
+SYS_P	include/unistd.h	24;"	d
+SYS_V	include/unistd.h	25;"	d
 SYS_cgetc	include/unistd.h	22;"	d
+SYS_check_PV_value	include/unistd.h	26;"	d
 SYS_env_alloc	include/unistd.h	16;"	d
 SYS_env_destroy	include/unistd.h	11;"	d
 SYS_getenvid	include/unistd.h	9;"	d
+SYS_init_PV_var	include/unistd.h	23;"	d
 SYS_ipc_can_send	include/unistd.h	20;"	d
 SYS_ipc_recv	include/unistd.h	21;"	d
 SYS_mem_alloc	include/unistd.h	13;"	d
@@ -391,10 +395,12 @@ SYS_mem_map	include/unistd.h	14;"	d
 SYS_mem_unmap	include/unistd.h	15;"	d
 SYS_panic	include/unistd.h	19;"	d
 SYS_putchar	include/unistd.h	8;"	d
+SYS_release_PV_var	include/unistd.h	27;"	d
 SYS_set_env_status	include/unistd.h	17;"	d
 SYS_set_pgfault_handler	include/unistd.h	12;"	d
 SYS_set_trapframe	include/unistd.h	18;"	d
 SYS_yield	include/unistd.h	10;"	d
+Semaphore	include/env.h	/^struct Semaphore {$/;"	s
 Stat	user/fd.h	/^struct Stat {$/;"	s
 Super	include/fs.h	/^struct Super {$/;"	s
 TAILQ_ENTRY	include/queue.h	192;"	d
@@ -525,6 +531,7 @@ binary_user_A_size	init/code_a.c	/^unsigned int binary_user_A_size = 5298;$/;"	v
 binary_user_A_start	init/code_a.c	/^unsigned char binary_user_A_start[] = {$/;"	v
 binary_user_B_size	init/code_b.c	/^unsigned int binary_user_B_size = 5298;$/;"	v
 binary_user_B_start	init/code_b.c	/^unsigned char binary_user_B_start[] = {$/;"	v
+blocked	include/env.h	/^	struct Env *blocked[16];$/;"	m	struct:Semaphore	typeref:struct:Semaphore::Env
 bnez	lib/genex.S	/^bnez	t1, timer_irq$/;"	l
 boot_dir	Makefile	/^boot_dir	  := boot$/;"	m
 boot_map_segment	mm/pmap.c	/^void boot_map_segment(Pde *pgdir, u_long va, u_long size, u_long pa, int perm)$/;"	f
@@ -678,6 +685,7 @@ fwritef	user/fprintf.c	/^int fwritef(int fd, const char *fmt, ...)$/;"	f
 gp	include/asm-mips3k/regdef.h	44;"	d
 gp	include/asm/regdef.h	44;"	d
 halt	drivers/gxconsole/console.c	/^void halt(void)$/;"	f
+head	include/env.h	/^	u_int head;$/;"	m	struct:Semaphore
 hi	include/trap.h	/^	unsigned long hi;$/;"	m	struct:Trapframe
 init_dir	Makefile	/^init_dir	  := init$/;"	m
 int16_t	include/types.h	/^typedef int      __attribute__((__mode__(HI))) int16_t;$/;"	t
@@ -848,6 +856,7 @@ s_nblocks	include/fs.h	/^	u_int s_nblocks;	\/\/ Total number of blocks on disk$/
 s_root	include/fs.h	/^	struct File s_root;	\/\/ Root directory node$/;"	m	struct:Super	typeref:struct:Super::File
 sched_yield	lib/sched.c	/^void sched_yield(void)$/;"	f
 seek	user/fd.c	/^seek(int fdnum, u_int offset)$/;"	f
+semaphores	lib/env.c	/^struct Semaphore semaphores[5];$/;"	v	typeref:struct:Semaphore
 set_except_vector	lib/traps.c	/^void *set_except_vector(int n, void *addr)$/;"	f
 set_pgfault_handler	user/pgfault.c	/^set_pgfault_handler(void (*fn)(u_int va))$/;"	f
 setup_c0_status	lib/kclock_asm.S	/^setup_c0_status STATUS_CU0|0x1001 0$/;"	l
@@ -883,10 +892,14 @@ strcmp	user/string.c	/^strcmp(const char *p, const char *q)$/;"	f
 strcpy	user/string.c	/^strcpy(char *dst, const char *src)$/;"	f
 strlen	user/string.c	/^strlen(const char *s)$/;"	f
 sync	user/file.c	/^sync(void)$/;"	f
+sys_P	lib/syscall_all.c	/^void sys_P(int sysno, int pv_id) {$/;"	f
+sys_V	lib/syscall_all.c	/^void sys_V(int sysno, int pv_id) {$/;"	f
 sys_call_table	lib/syscall.S	/^sys_call_table:                         \/\/ Syscall Table$/;"	l
+sys_check_PV_value	lib/syscall_all.c	/^int sys_check_PV_value(int sysno, int pv_id) {$/;"	f
 sys_env_alloc	lib/syscall_all.c	/^int sys_env_alloc(void)$/;"	f
 sys_env_destroy	lib/syscall_all.c	/^int sys_env_destroy(int sysno, u_int envid)$/;"	f
 sys_getenvid	lib/syscall_all.c	/^u_int sys_getenvid(void)$/;"	f
+sys_init_PV_var	lib/syscall_all.c	/^int sys_init_PV_var(int sysno, int init_value) {$/;"	f
 sys_ipc_can_send	lib/syscall_all.c	/^int sys_ipc_can_send(int sysno, u_int envid, u_int value, u_int srcva,$/;"	f
 sys_ipc_recv	lib/syscall_all.c	/^void sys_ipc_recv(int sysno, u_int dstva)$/;"	f
 sys_mem_alloc	lib/syscall_all.c	/^int sys_mem_alloc(int sysno, u_int envid, u_int va, u_int perm)$/;"	f
@@ -894,14 +907,19 @@ sys_mem_map	lib/syscall_all.c	/^int sys_mem_map(int sysno, u_int srcid, u_int sr
 sys_mem_unmap	lib/syscall_all.c	/^int sys_mem_unmap(int sysno, u_int envid, u_int va)$/;"	f
 sys_panic	lib/syscall_all.c	/^void sys_panic(int sysno, char *msg)$/;"	f
 sys_putchar	lib/syscall_all.c	/^void sys_putchar(int sysno, int c, int a2, int a3, int a4, int a5)$/;"	f
+sys_release_PV_var	lib/syscall_all.c	/^void sys_release_PV_var(int sysno, int pv_id) {$/;"	f
 sys_set_env_status	lib/syscall_all.c	/^int sys_set_env_status(int sysno, u_int envid, u_int status)$/;"	f
 sys_set_pgfault_handler	lib/syscall_all.c	/^int sys_set_pgfault_handler(int sysno, u_int envid, u_int func, u_int xstacktop)$/;"	f
 sys_set_trapframe	lib/syscall_all.c	/^int sys_set_trapframe(int sysno, u_int envid, struct Trapframe *tf)$/;"	f
 sys_yield	lib/syscall_all.c	/^void sys_yield(void)$/;"	f
+syscall_P	user/syscall_lib.c	/^void syscall_P(int pv_id) {$/;"	f
+syscall_V	user/syscall_lib.c	/^void syscall_V(int pv_id) {$/;"	f
 syscall_cgetc	user/syscall_lib.c	/^syscall_cgetc()$/;"	f
+syscall_check_PV_value	user/syscall_lib.c	/^int syscall_check_PV_value(int pv_id) {$/;"	f
 syscall_env_alloc	user/lib.h	/^inline static int syscall_env_alloc(void)$/;"	f
 syscall_env_destroy	user/syscall_lib.c	/^syscall_env_destroy(u_int envid)$/;"	f
 syscall_getenvid	user/syscall_lib.c	/^syscall_getenvid(void)$/;"	f
+syscall_init_PV_var	user/syscall_lib.c	/^int syscall_init_PV_var(int init_value) {$/;"	f
 syscall_ipc_can_send	user/syscall_lib.c	/^syscall_ipc_can_send(u_int envid, u_int value, u_int srcva, u_int perm)$/;"	f
 syscall_ipc_recv	user/syscall_lib.c	/^syscall_ipc_recv(u_int dstva)$/;"	f
 syscall_mem_alloc	user/syscall_lib.c	/^syscall_mem_alloc(u_int envid, u_int va, u_int perm)$/;"	f
@@ -909,6 +927,7 @@ syscall_mem_map	user/syscall_lib.c	/^syscall_mem_map(u_int srcid, u_int srcva, u
 syscall_mem_unmap	user/syscall_lib.c	/^syscall_mem_unmap(u_int envid, u_int va)$/;"	f
 syscall_panic	user/syscall_lib.c	/^syscall_panic(char *msg)$/;"	f
 syscall_putchar	user/syscall_lib.c	/^void syscall_putchar(char ch)$/;"	f
+syscall_release_PV_var	user/syscall_lib.c	/^void syscall_release_PV_var(int pv_id) {$/;"	f
 syscall_set_env_status	user/syscall_lib.c	/^syscall_set_env_status(u_int envid, u_int status)$/;"	f
 syscall_set_pgfault_handler	user/syscall_lib.c	/^syscall_set_pgfault_handler(u_int envid, void (*func)(void), u_int xstacktop)$/;"	f
 syscall_set_trapframe	user/syscall_lib.c	/^syscall_set_trapframe(u_int envid, struct Trapframe *tf)$/;"	f
@@ -940,6 +959,7 @@ t8	include/asm-mips3k/regdef.h	39;"	d
 t8	include/asm/regdef.h	39;"	d
 t9	include/asm-mips3k/regdef.h	40;"	d
 t9	include/asm/regdef.h	40;"	d
+tail	include/env.h	/^	u_int tail;$/;"	m	struct:Semaphore
 theFatalMsg	lib/print.c	/^static const char theFatalMsg[] = "fatal error in lp_Print!";$/;"	v	file:
 timer_irq	lib/genex.S	/^timer_irq:$/;"	l
 tlb_invalidate	mm/pmap.c	/^tlb_invalidate(Pde *pgdir, u_long va)$/;"	f
@@ -973,10 +993,11 @@ uint64_t	readelf/kerelf.h	/^typedef u_int64_t               uint64_t;$/;"	t
 umain	user/fktest.c	/^void umain()$/;"	f
 umain	user/idle.c	/^void umain()$/;"	f
 umain	user/pingpong.c	/^umain(void)$/;"	f
+used	include/env.h	/^	u_int used;$/;"	m	struct:Semaphore
 user_PrintChar	user/print.c	/^user_PrintChar(char *buf, char c, int length, int ladjust)$/;"	f
 user_PrintNum	user/print.c	/^user_PrintNum(char *buf, unsigned long u, int base, int negFlag,$/;"	f
 user_PrintString	user/print.c	/^user_PrintString(char *buf, char *s, int length, int ladjust)$/;"	f
-user_assert	user/lib.h	128;"	d
+user_assert	user/lib.h	134;"	d
 user_bcopy	user/fork.c	/^void user_bcopy(const void *src, void *dst, size_t len)$/;"	f
 user_bzero	user/fork.c	/^void user_bzero(void *v, u_int n)$/;"	f
 user_dir	Makefile	/^user_dir	  := user$/;"	m
@@ -1010,6 +1031,7 @@ v1	include/stackframe.h	/^lw	v1, TF_LO(sp)$/;"	v
 v1	include/stackframe.h	/^mtc0	v1, CP0_EPC$/;"	v
 v1	include/stackframe.h	/^nor	v1, $0, v1$/;"	v
 va2pa	include/pmap.h	/^va2pa(Pde *pgdir, u_long va)$/;"	f
+value	include/env.h	/^	u_int value;$/;"	m	struct:Semaphore
 vmlinux_elf	Makefile	/^vmlinux_elf	  := gxemul\/vmlinux$/;"	m
 vpd	user/entry.S	/^vpd:$/;"	l
 vpt	user/entry.S	/^vpt:$/;"	l

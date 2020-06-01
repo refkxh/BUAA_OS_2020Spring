@@ -18,6 +18,7 @@ struct Env_list env_sched_list[2];      // Runnable list
 extern Pde *boot_pgdir;
 extern char *KERNEL_SP;
 
+struct Semaphore semaphores[5];
 
 /* Overview:
  *  This function is for making an unique ID for every env.

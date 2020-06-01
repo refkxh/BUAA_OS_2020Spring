@@ -87,3 +87,23 @@ syscall_cgetc()
 {
 	return msyscall(SYS_cgetc, 0, 0, 0, 0, 0);
 }
+
+int syscall_init_PV_var(int init_value) {
+	return msyscall(SYS_init_PV_var, init_value, 0, 0, 0, 0);
+}
+
+void syscall_P(int pv_id) {
+	msyscall(SYS_P, pv_id, 0, 0, 0, 0);
+}
+
+void syscall_V(int pv_id) {
+	msyscall(SYS_V, pv_id, 0, 0, 0, 0);
+}
+
+int syscall_check_PV_value(int pv_id) {
+	return msyscall(SYS_check_PV_value, pv_id, 0, 0, 0, 0);
+}
+
+void syscall_release_PV_var(int pv_id) {
+	msyscall(SYS_release_PV_var, pv_id, 0, 0, 0, 0);
+}
