@@ -170,9 +170,9 @@ ELFMAG3	readelf/kerelf.h	94;"	d
 END	include/asm-mips3k/asm.h	35;"	d
 END	include/asm/asm.h	35;"	d
 ENVX	include/env.h	13;"	d
-ENV_CREATE	include/env.h	86;"	d
-ENV_CREATE2	include/env.h	74;"	d
-ENV_CREATE_PRIORITY	include/env.h	79;"	d
+ENV_CREATE	include/env.h	87;"	d
+ENV_CREATE2	include/env.h	75;"	d
+ENV_CREATE_PRIORITY	include/env.h	80;"	d
 ENV_FREE	include/env.h	17;"	d
 ENV_NOT_RUNNABLE	include/env.h	19;"	d
 ENV_RUNNABLE	include/env.h	18;"	d
@@ -688,6 +688,7 @@ gp	include/asm/regdef.h	44;"	d
 halt	drivers/gxconsole/console.c	/^void halt(void)$/;"	f
 head	include/env.h	/^	u_int head;$/;"	m	struct:Semaphore
 hi	include/trap.h	/^	unsigned long hi;$/;"	m	struct:Trapframe
+id	include/env.h	/^	int id;$/;"	m	struct:Semaphore
 init_dir	Makefile	/^init_dir	  := init$/;"	m
 int16_t	include/types.h	/^typedef int      __attribute__((__mode__(HI))) int16_t;$/;"	t
 int16_t	readelf/types.h	/^typedef short                     int16_t;$/;"	t

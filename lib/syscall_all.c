@@ -391,48 +391,54 @@ int sys_ipc_can_send(int sysno, u_int envid, u_int value, u_int srcva,
 }
 
 int sys_init_PV_var(int sysno, int init_value) {
+	static int pv_count = 0;
 	int i;
 	for (i = 0; i < 8; i++) {
 		if (semaphores[i].used == 0) {
+			semaphores[i].id = ((pv_count++) << 3) | i;
 			semaphores[i].used = 1;
 			semaphores[i].value = init_value;
 			semaphores[i].head = 0;
 			semaphores[i].tail = 0;
-			return i;
+			return semaphores[i].id;
 		}
 	}
 	return -1;
 }
 
 void sys_P(int sysno, int pv_id) {
-	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return;
-	semaphores[pv_id].value--;
-	if (semaphores[pv_id].value < 0) {
+	int index = pv_id & 7;
+	if (index < 0 || index >= 8 || semaphores[index].used == 0 || semaphores[index].id != pv_id) return;
+	semaphores[index].value--;
+	if (semaphores[index].value < 0) {
 		curenv->env_status = ENV_NOT_RUNNABLE;
-		semaphores[pv_id].blocked[(semaphores[pv_id].tail++) % 16] = curenv;
+		semaphores[index].blocked[(semaphores[index].tail++) % 16] = curenv;
 		sys_yield();
 	}
 }
 
 void sys_V(int sysno, int pv_id) {
+	int index = pv_id & 7;
 	struct Env *release_env;
-	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return;
-	semaphores[pv_id].value++;
-	if (semaphores[pv_id].value <= 0) {
-		release_env = semaphores[pv_id].blocked[(semaphores[pv_id].head++) % 16];
+	if (index < 0 || index >= 8 || semaphores[index].used == 0 || semaphores[index].id != pv_id) return;
+	semaphores[index].value++;
+	if (semaphores[index].value <= 0) {
+		release_env = semaphores[index].blocked[(semaphores[index].head++) % 16];
 		release_env->env_status = ENV_RUNNABLE;
 	}
 }
 
 int sys_check_PV_value(int sysno, int pv_id) {
-	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return -1;
-	return semaphores[pv_id].value;
+	int index = pv_id & 7;
+	if (index < 0 || index >= 8 || semaphores[index].used == 0 || semaphores[index].id != pv_id) return -1;
+	return semaphores[index].value;
 }
 
 void sys_release_PV_var(int sysno, int pv_id) {
-	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return;
-	semaphores[pv_id].used = 0;
-	while (semaphores[pv_id].head < semaphores[pv_id].tail) {
-		env_free(semaphores[pv_id].blocked[(semaphores[pv_id].head++) % 16]);
+	int index = pv_id & 7;
+	if (index < 0 || index >= 8 || semaphores[index].used == 0 || semaphores[index].id != pv_id) return;
+	semaphores[index].used = 0;
+	while (semaphores[index].head < semaphores[index].tail) {
+		env_free(semaphores[index].blocked[(semaphores[index].head++) % 16]);
 	}
 }
