@@ -392,7 +392,7 @@ int sys_ipc_can_send(int sysno, u_int envid, u_int value, u_int srcva,
 
 int sys_init_PV_var(int sysno, int init_value) {
 	int i;
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < 8; i++) {
 		if (semaphores[i].used == 0) {
 			semaphores[i].used = 1;
 			semaphores[i].value = init_value;
@@ -405,7 +405,7 @@ int sys_init_PV_var(int sysno, int init_value) {
 }
 
 void sys_P(int sysno, int pv_id) {
-	if (pv_id < 0 || pv_id >= 5 || semaphores[pv_id].used == 0) return;
+	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return;
 	semaphores[pv_id].value--;
 	if (semaphores[pv_id].value < 0) {
 		curenv->env_status = ENV_NOT_RUNNABLE;
@@ -416,7 +416,7 @@ void sys_P(int sysno, int pv_id) {
 
 void sys_V(int sysno, int pv_id) {
 	struct Env *release_env;
-	if (pv_id < 0 || pv_id >= 5 || semaphores[pv_id].used == 0) return;
+	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return;
 	semaphores[pv_id].value++;
 	if (semaphores[pv_id].value <= 0) {
 		release_env = semaphores[pv_id].blocked[(semaphores[pv_id].head++) % 16];
@@ -425,12 +425,12 @@ void sys_V(int sysno, int pv_id) {
 }
 
 int sys_check_PV_value(int sysno, int pv_id) {
-	if (pv_id < 0 || pv_id >= 5 || semaphores[pv_id].used == 0) return -1;
+	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return -1;
 	return semaphores[pv_id].value;
 }
 
 void sys_release_PV_var(int sysno, int pv_id) {
-	if (pv_id < 0 || pv_id >= 5 || semaphores[pv_id].used == 0) return;
+	if (pv_id < 0 || pv_id >= 8 || semaphores[pv_id].used == 0) return;
 	semaphores[pv_id].used = 0;
 	while (semaphores[pv_id].head < semaphores[pv_id].tail) {
 		env_free(semaphores[pv_id].blocked[(semaphores[pv_id].head++) % 16]);

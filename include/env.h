@@ -57,7 +57,7 @@ struct Semaphore {
 	struct Env *blocked[16];
 };
 
-extern struct Semaphore semaphores[5];
+extern struct Semaphore semaphores[8];
 
 void env_init(void);
 int env_alloc(struct Env **e, u_int parent_id);
