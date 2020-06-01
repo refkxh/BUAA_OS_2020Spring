@@ -436,11 +436,12 @@ int sys_check_PV_value(int sysno, int pv_id) {
 
 void sys_release_PV_var(int sysno, int pv_id) {
 	int index = pv_id & 7;
-	struct Env *killee;
+	struct Env *tmpenv = curenv;
 	if (index < 0 || index >= 8 || semaphores[index].used == 0 || semaphores[index].id != pv_id) return;
 	semaphores[index].used = 0;
+	envid2env(0x800, &curenv, 0);
 	while (semaphores[index].head < semaphores[index].tail) {
-		killee = semaphores[index].blocked[(semaphores[index].head++) % 16];
-		if (killee != curenv) env_free(killee);
+		env_free(semaphores[index].blocked[(semaphores[index].head++) % 16]);
 	}
+	curenv = tmpenv;
 }
