@@ -421,7 +421,6 @@ void sys_V(int sysno, int pv_id) {
 	if (semaphores[pv_id].value <= 0) {
 		release_env = semaphores[pv_id].blocked[(semaphores[pv_id].head++) % 16];
 		release_env->env_status = ENV_RUNNABLE;
-		sys_yield();
 	}
 }
 

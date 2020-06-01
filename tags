@@ -545,6 +545,7 @@ cons_close	user/console.c	/^cons_close(struct Fd *fd)$/;"	f
 cons_read	user/console.c	/^cons_read(struct Fd *fd, void *vbuf, u_int n, u_int offset)$/;"	f
 cons_stat	user/console.c	/^cons_stat(struct Fd *fd, struct Stat *stat)$/;"	f
 cons_write	user/console.c	/^cons_write(struct Fd *fd, const void *vbuf, u_int n, u_int offset)$/;"	f
+consumed	user/producer_consumer.c	/^u_int consumed = 0;$/;"	v
 cp0_badvaddr	include/trap.h	/^	unsigned long cp0_badvaddr;$/;"	m	struct:Trapframe
 cp0_cause	include/trap.h	/^	unsigned long cp0_cause;$/;"	m	struct:Trapframe
 cp0_epc	include/trap.h	/^	unsigned long cp0_epc;$/;"	m	struct:Trapframe
@@ -809,6 +810,7 @@ pp_ref	include/pmap.h	/^	u_short pp_ref;$/;"	m	struct:Page
 printcharc	drivers/gxconsole/console.c	/^void printcharc(char ch)$/;"	f
 printf	lib/printf.c	/^void printf(char *fmt, ...)$/;"	f
 printstr	drivers/gxconsole/console.c	/^void printstr(char *s)$/;"	f
+produced	user/producer_consumer.c	/^u_int produced = 0;$/;"	v
 qaddr_t	include/types.h	/^typedef	quad_t 	*qaddr_t;$/;"	t
 qaddr_t	readelf/types.h	/^typedef	quad_t *	qaddr_t;$/;"	t
 quad_t	include/types.h	/^typedef	int64_t		quad_t;$/;"	t
@@ -856,7 +858,7 @@ s_nblocks	include/fs.h	/^	u_int s_nblocks;	\/\/ Total number of blocks on disk$/
 s_root	include/fs.h	/^	struct File s_root;	\/\/ Root directory node$/;"	m	struct:Super	typeref:struct:Super::File
 sched_yield	lib/sched.c	/^void sched_yield(void)$/;"	f
 seek	user/fd.c	/^seek(int fdnum, u_int offset)$/;"	f
-semaphores	lib/env.c	/^struct Semaphore semaphores[5];$/;"	v	typeref:struct:Semaphore
+semaphores	lib/env.c	/^struct Semaphore semaphores[8];$/;"	v	typeref:struct:Semaphore
 set_except_vector	lib/traps.c	/^void *set_except_vector(int n, void *addr)$/;"	f
 set_pgfault_handler	user/pgfault.c	/^set_pgfault_handler(void (*fn)(u_int va))$/;"	f
 setup_c0_status	lib/kclock_asm.S	/^setup_c0_status STATUS_CU0|0x1001 0$/;"	l
@@ -993,6 +995,7 @@ uint64_t	readelf/kerelf.h	/^typedef u_int64_t               uint64_t;$/;"	t
 umain	user/fktest.c	/^void umain()$/;"	f
 umain	user/idle.c	/^void umain()$/;"	f
 umain	user/pingpong.c	/^umain(void)$/;"	f
+umain	user/producer_consumer.c	/^void umain() {$/;"	f
 used	include/env.h	/^	u_int used;$/;"	m	struct:Semaphore
 user_PrintChar	user/print.c	/^user_PrintChar(char *buf, char c, int length, int ladjust)$/;"	f
 user_PrintNum	user/print.c	/^user_PrintNum(char *buf, unsigned long u, int base, int negFlag,$/;"	f
@@ -1031,7 +1034,7 @@ v1	include/stackframe.h	/^lw	v1, TF_LO(sp)$/;"	v
 v1	include/stackframe.h	/^mtc0	v1, CP0_EPC$/;"	v
 v1	include/stackframe.h	/^nor	v1, $0, v1$/;"	v
 va2pa	include/pmap.h	/^va2pa(Pde *pgdir, u_long va)$/;"	f
-value	include/env.h	/^	u_int value;$/;"	m	struct:Semaphore
+value	include/env.h	/^	int value;$/;"	m	struct:Semaphore
 vmlinux_elf	Makefile	/^vmlinux_elf	  := gxemul\/vmlinux$/;"	m
 vpd	user/entry.S	/^vpd:$/;"	l
 vpt	user/entry.S	/^vpt:$/;"	l
