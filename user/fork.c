@@ -165,7 +165,7 @@ fork(void)
 	u_int newenvid;
 	extern struct Env *envs;
 	extern struct Env *env;
-	u_int i;
+	u_int i, j;
 
 	//The parent installs pgfault using set_pgfault_handler
 	set_pgfault_handler(pgfault);
@@ -173,8 +173,12 @@ fork(void)
 	//alloc a new alloc
 	newenvid = syscall_env_alloc();
 	if (newenvid) {
-		for (i = 0; i < VPN(USTACKTOP); i++) {
-			if (((*vpd)[i >> 10] & PTE_V) && ((*vpt)[i] & PTE_V)) duppage(newenvid, i);
+		for (i = 0; i < USTACKTOP; i += PDMAP) {
+			if ((*vpd)[PDX(i)] & PTE_V) {
+				for (j = 0; j < PDMAP && i + j < USTACKTOP; j += BY2PG) {
+					if ((*vpt)[VPN(i + j)] & PTE_V) duppage(newenvid, VPN(i + j));
+				}
+			}
 		}
 		syscall_mem_alloc(newenvid, UXSTACKTOP - BY2PG, PTE_V | PTE_R);
 		syscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP);
