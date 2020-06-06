@@ -545,7 +545,6 @@ cons_close	user/console.c	/^cons_close(struct Fd *fd)$/;"	f
 cons_read	user/console.c	/^cons_read(struct Fd *fd, void *vbuf, u_int n, u_int offset)$/;"	f
 cons_stat	user/console.c	/^cons_stat(struct Fd *fd, struct Stat *stat)$/;"	f
 cons_write	user/console.c	/^cons_write(struct Fd *fd, const void *vbuf, u_int n, u_int offset)$/;"	f
-consumed	user/producer_consumer.c	/^u_int consumed = 0;$/;"	v
 cp0_badvaddr	include/trap.h	/^	unsigned long cp0_badvaddr;$/;"	m	struct:Trapframe
 cp0_cause	include/trap.h	/^	unsigned long cp0_cause;$/;"	m	struct:Trapframe
 cp0_epc	include/trap.h	/^	unsigned long cp0_epc;$/;"	m	struct:Trapframe
@@ -811,7 +810,6 @@ pp_ref	include/pmap.h	/^	u_short pp_ref;$/;"	m	struct:Page
 printcharc	drivers/gxconsole/console.c	/^void printcharc(char ch)$/;"	f
 printf	lib/printf.c	/^void printf(char *fmt, ...)$/;"	f
 printstr	drivers/gxconsole/console.c	/^void printstr(char *s)$/;"	f
-produced	user/producer_consumer.c	/^u_int produced = 0;$/;"	v
 qaddr_t	include/types.h	/^typedef	quad_t 	*qaddr_t;$/;"	t
 qaddr_t	readelf/types.h	/^typedef	quad_t *	qaddr_t;$/;"	t
 quad_t	include/types.h	/^typedef	int64_t		quad_t;$/;"	t
