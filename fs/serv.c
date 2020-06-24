@@ -122,6 +122,8 @@ serve_open(u_int envid, struct Fsreq_open *rq)
 		return ;
 	}
 
+	user_bcopy(path, f->f_path, 40);
+
 	// Save the file pointer.
 	o->o_file = f;
 

@@ -277,3 +277,14 @@ sync(void)
 	return fsipc_sync();
 }
 
+int remove_on_open(int fdnum) {
+	struct Fd *fd;
+	struct Filefd *file;
+	fd_lookup(fdnum, &fd);
+	file_close(fd);
+	if ((fd->fd_omode & O_RMONLY) == 0) return -E_INVAL;
+	file = fd;
+	remove(file->f_file.f_path);
+	return 0;
+}
+
