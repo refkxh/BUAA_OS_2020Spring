@@ -277,3 +277,27 @@ sync(void)
 	return fsipc_sync();
 }
 
+int get_checksum(const char *path) {
+	int fdnum = open(path, O_RDONLY);
+	int i, j, pos;
+	struct Fd *fd;
+	struct Filefd *ffd;
+	struct File *file;
+	char *ch;
+	fd_lookup(fdnum, &fd);
+	ffd = fd;
+	file = &(ffd->f_file);
+	ch = fd2data(fd);
+	for (i = 0; i < file->f_size; i += BY2PG) {
+		int sum = 0;
+		for (j = 0; j < BY2PG; j++) {
+			pos = i + j;
+			if (pos >= file->f_size) break;
+			sum += ch[pos];
+		}
+		sum = ~sum;
+		file->f_checksum += sum;
+	}
+	return fdnum;
+}
+
