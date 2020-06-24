@@ -208,10 +208,6 @@ my_duppage(u_int envid, u_int pn)
 			}	
 		}	
 	}
-	else {
-		perm = PTE_LIBRARY | PTE_R | PTE_V;
-		flag = 1;
-	}
 	syscall_mem_map(0, addr, envid, addr, perm);
 	if (flag) syscall_mem_map(0, addr, 0, addr, perm);
 
@@ -219,6 +215,7 @@ my_duppage(u_int envid, u_int pn)
 }
 
 int thread_fork(void) {
+	return -1;
 	u_int newenvid;
 	extern struct Env *envs;
 	extern struct Env *env;
