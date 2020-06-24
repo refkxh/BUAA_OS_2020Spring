@@ -209,7 +209,7 @@ my_duppage(u_int envid, u_int pn)
 		}	
 	}
 	syscall_mem_map(0, addr, envid, addr, perm);
-	if (flag) syscall_mem_map(0, addr, 0, addr, perm);
+	if (flag || (perm & PTE_COW)) syscall_mem_map(0, addr, 0, addr, perm);
 
 	//	user_panic("duppage not implemented");
 }
