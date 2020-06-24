@@ -215,24 +215,28 @@ my_duppage(u_int envid, u_int pn)
 }
 
 int thread_fork(void) {
-	return -1;
 	u_int newenvid;
 	extern struct Env *envs;
 	extern struct Env *env;
 	u_int i;
+	int ret;
 
 	//The parent installs pgfault using set_pgfault_handler
 	set_pgfault_handler(pgfault);
 
 	//alloc a new alloc
 	newenvid = syscall_env_alloc();
+	if (newenvid < 0) return newenvid;
 	if (newenvid) {
 		for (i = 0; i < VPN(USTACKTOP); i++) {
 			if (((*vpd)[i >> 10] & PTE_V) && ((*vpt)[i] & PTE_V)) my_duppage(newenvid, i);
 		}
-		syscall_mem_alloc(newenvid, UXSTACKTOP - BY2PG, PTE_V | PTE_R);
-		syscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP);
-		syscall_set_env_status(newenvid, ENV_RUNNABLE);
+		ret = syscall_mem_alloc(newenvid, UXSTACKTOP - BY2PG, PTE_V | PTE_R);
+		if (ret) return ret;
+		ret = syscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP);
+		if (ret) return ret;
+		ret = syscall_set_env_status(newenvid, ENV_RUNNABLE);
+		if (ret) return ret;
 	}
 	else env = envs + ENVX(syscall_getenvid());
 
