@@ -1,3 +1,5 @@
+#include "lib.h"
+
 int ugetStr(char *buff) {
 	int len = 0;
 	while (true) {
