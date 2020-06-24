@@ -186,6 +186,60 @@ fork(void)
 	return newenvid;
 }
 
+u_int user_getsp(void) {
+	char sp;
+	return ROUNDDOWN(&sp - 1, BY2PG);
+}
+
+static void
+my_duppage(u_int envid, u_int pn)
+{
+	u_int addr;
+	u_int perm;
+	int flag = 0;
+
+	addr = pn << PGSHIFT;
+	perm = (*vpt)[pn] & (BY2PG - 1);
+	if (addr >= user_getsp()) {
+		if (perm & PTE_R) {
+			if (!(perm & PTE_LIBRARY)) {
+				flag = 1;
+				perm |= PTE_COW;
+			}	
+		}	
+	}
+	syscall_mem_map(0, addr, envid, addr, perm);
+	if (flag) syscall_mem_map(0, addr, 0, addr, perm);
+
+	//	user_panic("duppage not implemented");
+}
+
+int thread_fork(void) {
+	u_int newenvid;
+	extern struct Env *envs;
+	extern struct Env *env;
+	u_int i;
+
+	//The parent installs pgfault using set_pgfault_handler
+	set_pgfault_handler(pgfault);
+
+	//alloc a new alloc
+	newenvid = syscall_env_alloc();
+	if (newenvid) {
+		for (i = 0; i < VPN(USTACKTOP); i++) {
+			if (((*vpd)[i >> 10] & PTE_V) && ((*vpt)[i] & PTE_V)) my_duppage(newenvid, i);
+		}
+		syscall_mem_alloc(newenvid, UXSTACKTOP - BY2PG, PTE_V | PTE_R);
+		syscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP);
+		syscall_set_env_status(newenvid, ENV_RUNNABLE);
+	}
+	else env = envs + ENVX(syscall_getenvid());
+
+
+	return newenvid;
+
+}
+
 // Challenge!
 int
 sfork(void)
