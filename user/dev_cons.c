@@ -6,10 +6,10 @@ int ugetStr(char *buff) {
 		char ch;
 		syscall_read_dev(&ch, 0x10000000, 1);
 		if (ch == 0) continue;
-		if (ch != '\r') syscall_write_dev(&ch, 0x10000000, 1);
+		syscall_write_dev(&ch, 0x10000000, 1);
 		buff[len++] = ch;
 		if (ch == '\r') {
-			buff[--len] = '\0';
+			buff[len] = '\0';
 			return len;
 		}
 	}
@@ -34,6 +34,7 @@ static void u_myoutput(void *arg, const char *s, int l)
 }
 
 void uwritef(char *fmt, ...){
+	return;
 	va_list ap;
 	va_start(ap, fmt);
 	user_lp_Print(u_myoutput, 0, fmt, ap);
