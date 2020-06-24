@@ -6,10 +6,10 @@ int ugetStr(char *buff) {
 		char ch;
 		syscall_read_dev(&ch, 0x10000000, 1);
 		if (ch == 0) continue;
-		syscall_write_dev(&ch, 0x10000000, 1);
+		if (ch != '\r') syscall_write_dev(&ch, 0x10000000, 1);
 		buff[len++] = ch;
 		if (ch == '\r') {
-			buff[len] = '\0';
+			buff[--len] = '\0';
 			return len;
 		}
 	}
@@ -28,7 +28,7 @@ static void u_myoutput(void *arg, const char *s, int l)
 		syscall_write_dev(&s[i], 0x10000000, 1);
 
 		if (s[i] == '\n') {
-			syscall_write_dev('\n', 0x10000000, 1);
+			sys_write_dev('\n', 0x10000000, 1);
 		}
 	}
 }
