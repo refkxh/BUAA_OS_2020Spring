@@ -2,7 +2,7 @@
 
 int ugetStr(char *buff) {
 	int len = 0;
-	while (true) {
+	while (1) {
 		char ch;
 		syscall_read_dev(&ch, 0x10000000, 1);
 		if (ch == 0) continue;
