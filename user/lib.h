@@ -38,6 +38,9 @@ int spawn(char *prog, char **argv);
 int spawnl(char *prot, char *args, ...);
 int fork(void);
 
+int thread_fork(void);
+u_int user_getsp(void);
+
 void user_bcopy(const void *src, void *dst, size_t len);
 void user_bzero(void *v, u_int n);
 //////////////////////////////////////////////////syscall_lib

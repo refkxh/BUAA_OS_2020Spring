@@ -1,7 +1,7 @@
 #include "lib.h"
 
 
-void umain()
+/*void umain()
 {
 	int a = 0;
 	int id = 0;
@@ -27,4 +27,18 @@ void umain()
 	for (;;) {
 		writef("this is father: a:%d\n", a);
 	}
+}*/
+
+int a;
+
+void umain() {
+	if (thread_fork() > 0) {
+		a++;
+		writef("father %d\n", a);
+	}
+	else {
+		writef("son, %d\n", a);
+	}
 }
+
+
